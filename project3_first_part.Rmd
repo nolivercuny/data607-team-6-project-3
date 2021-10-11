@@ -1,6 +1,6 @@
 ---
 title: "Project 3 - Part One"
-author: "Nick Oliver"
+author: "Team 6"
 output:
   # prettydoc::html_pretty:
   #   theme: hpstr
