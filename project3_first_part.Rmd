@@ -42,6 +42,7 @@ Create a short document, with the names of group members. You should briefly des
 |`id`|`int`|`pk`|
 |`source`|`text`|`not null`|
 |`date_posted`|`date`||
+|`company`|`text`||
 
 `Job Listing Requirements`
 
@@ -50,3 +51,6 @@ Create a short document, with the names of group members. You should briefly des
 |`id`|`int`|`pk`|
 |`job_listing_id`|`int`|`fk`|
 |`skill`|`text`|`not null`|
+
+![Entity Relationship Diagram](./erd.png)
+
