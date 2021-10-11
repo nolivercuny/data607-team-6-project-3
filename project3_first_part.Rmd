@@ -28,4 +28,25 @@ Create a short document, with the names of group members. You should briefly des
 ## Data Sources
 
 - Data will be obtained from publicly available job postings for Data Scientist positions on job aggregation websites. The commonly used section in job postings where required skills are listed will be used as the source of the data for what Data Science skills are in demand.
+- Data will be pulled from APIs or scrapped from the postings
+- Data will be loaded into the a database using CSV files or direct insert statements
 
+## Database Design
+
+### Tables
+
+`Job Listing`
+
+|`column_name`|`data_type`|`attrs`|
+|---|---|---|
+|`id`|`int`|`pk`|
+|`source`|`text`|`not null`|
+|`date_posted`|`date`||
+
+`Job Listing Requirements`
+
+|`column_name`|`data_type`|`attrs`|
+|---|---|---|
+|`id`|`int`|`pk`|
+|`job_listing_id`|`int`|`fk`|
+|`skill`|`text`|`not null`|
