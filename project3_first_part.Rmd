@@ -1,0 +1,31 @@
+---
+title: "Project 3 - Part One"
+author: "Nick Oliver"
+output:
+  prettydoc::html_pretty:
+    theme: hpstr
+    highlight: github
+editor_options: 
+  chunk_output_type: console
+---
+
+# Team 6 - Project 3
+
+Create a short document, with the names of group members. You should briefly describe your collaboration tool(s) you’ll use as a group, including for communication, code sharing, and project documentation. You should have identified your data sources, where the data can be found, and how to load it. And you should have created at least a logical model for your normalized database, and produced an Entity-Relationship (ER) diagram documenting your database design.
+
+## Team Members
+
+- Donald Butler
+- Jeff Parks
+- Mark Schmalfeld
+- Nick Oliver
+
+## Collaboration Tools
+
+- Slack for team communication
+- Shared GitHub repository for editing code and uploading documents
+
+## Data Sources
+
+- Data will be obtained from publicly available job postings for Data Scientist positions on job aggregation websites. The commonly used section in job postings where required skills are listed will be used as the source of the data for what Data Science skills are in demand.
+
