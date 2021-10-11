@@ -2,9 +2,10 @@
 title: "Project 3 - Part One"
 author: "Nick Oliver"
 output:
-  prettydoc::html_pretty:
-    theme: hpstr
-    highlight: github
+  # prettydoc::html_pretty:
+  #   theme: hpstr
+  #   highlight: github
+  pdf_document: default
 editor_options: 
   chunk_output_type: console
 ---
