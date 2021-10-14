@@ -14,4 +14,4 @@ python requirements:
 
 system requirements:
 
-- [chromedriver]('https://chromedriver.chromium.org/downloads')
+- [chromedriver](https://chromedriver.chromium.org/downloads)
