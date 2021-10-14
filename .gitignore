@@ -3,6 +3,10 @@
 .DS_Store
 browser_cache
 
+## jupyter
+
+.ipynb_checkpoints
+
 ## python
 
 # Byte-compiled / optimized / DLL files

@@ -1,4 +1,5 @@
 **job_listings_final.csv**
+
 838 top search results on LinkedIn for "Data Scientist" in "New York, NY", fetched on Oct 12, 2021.
 
 - search_rank

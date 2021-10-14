@@ -10,6 +10,8 @@ python requirements:
 - shutil
 - time
 
+```pip3 install selenium bs4 pandas``` (others are system modules)
+
 system requirements:
 
-- chromedriver
+- [chromedriver]('https://chromedriver.chromium.org/downloads')
