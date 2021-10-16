@@ -88,9 +88,25 @@ dbWriteTable(con, "job_listing", joined, append=TRUE)
 ```
 
 ### Populate Job Listing Skills Table
-```{r}
 
+#### Load data into DF
+```{r}
+wordsDataUrl <- "https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/data/jobdata_words.csv"
+wordsJobListingData <- read_csv(url(wordsDataUrl))
+wordsJobListingData<-data_frame(wordsJobListingData)
 ```
+
+
+```{r}
+wordsDf <- wordsJobListingData %>% select(search_rank, word)
+jobListingWithId <- dbReadTable(con,"job_listing")
+joinedWords<-left_join(wordsDf, jobListingWithId, by="search_rank") %>%
+  select(id, word) %>%
+  rename(job_listing_id = id, skill = word)
+dbWriteTable(con,"job_listing_skill", joinedWords, append=TRUE)
+```
+
+
 
 
 ## Close Connection
