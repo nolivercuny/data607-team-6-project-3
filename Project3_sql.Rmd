@@ -107,6 +107,11 @@ dbWriteTable(con,"job_listing_skill", joinedWords, append=TRUE)
 ```
 
 
+## Example Queries
+
+```{r}
+fbJobsDf <- dbGetQuery(con, "SELECT * FROM job_listing jl JOIN company c on c.id = jl.company_id JOIN job_listing_skill jls on jls.job_listing_id = jl.id where c.company_name = 'Facebook'")
+```
 
 
 ## Close Connection
