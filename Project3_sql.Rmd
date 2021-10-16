@@ -47,6 +47,7 @@ for (table in tables) {
 dbListTables(con)
 dbListFields(con, "job_listing")
 dbListFields(con, "company")
+dbListFields(con, "job_listing_skill")
 ```
 
 ## Populate Tables
@@ -63,13 +64,20 @@ jobdat<-data_frame(jobdat)
 
 ### Populate Company Table
 ```{r}
-companiesDf <- jobdat %>% select(company_name, company_size, industry) %>% distinct()
+companiesDf <- jobdat %>% select(company_name, company_size, industry) %>% distinct() 
+companiesDf$company_name <- companiesDf$company_name %>% replace_na("unknown")
 dbWriteTable(con,"company",companiesDf, append=TRUE)
 ```
 
 ### Populate Job Listing Table
 ```{r}
-
+jobListingDf <- jobdat %>% select(-c("company_size", "industry"))
+jobListingDf$company_name <- jobListingDf$company_name %>% replace_na("unknown")
+companiesWithId <- dbReadTable(con,"company")
+joined <- left_join(jobListingDf, companiesWithId, by="company_name") %>% 
+  select(-c("company_size", "industry","company_name")) %>%
+  rename(company_id = id)
+dbWriteTable(con, "job_listing", joined, append=TRUE)
 ```
 
 ### Populate Job Listing Skills Table
