@@ -1,0 +1,156 @@
+---
+title: "Project 3 - Data Scrap"
+author: "Mark Schmalfeld"
+date: "10/15/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r}
+
+library(tidyverse)
+library(RCurl)
+library(dbplyr)
+library(stringr)
+library(tidytext)
+```
+
+Load the datafile into folder
+
+```{r}
+
+urlfile<-"https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/data/job_listings_final.csv" 
+jobdat <- read_csv(url(urlfile))
+
+#view short file summary and class
+jobdat<-data_frame(jobdat)
+glimpse(jobdat)
+
+```
+
+Unnest the text from the job description field into words and remove "stop words" (the, of, to, etc)
+
+```{r text}
+
+jobdat_word<- unnest_tokens(
+  jobdat,
+  word,
+  description,
+  token= "words",
+  format=c("text"),
+  to_lower=TRUE,
+  drop=TRUE,
+  collapse=NULL,
+)
+
+jobdat_word <-jobdat_word %>%
+  anti_join(stop_words)
+
+glimpse(jobdat_word)
+
+```
+
+Look at word count in the datafile for most common words
+
+```{r word count}
+
+jobdat_word %>%
+  count(word,sort=TRUE)
+
+jobdat %>%
+  count(company_name,sort=TRUE)
+
+jobdat %>%
+  count(industry,sort=TRUE)
+
+jobdat %>%
+  count(region,sort=TRUE)
+
+jobdat %>%
+  count(job_title,sort=TRUE)
+
+```
+
+Plot data in first simple plot to review data set of most common word from job description.  Follow similar review to plot also the most common companies and industries that have data science jobs open.
+
+```{r blot of word count}
+
+library(ggplot2)
+
+jobdat_word %>%
+  count(word, sort=TRUE) %>%
+  filter(n> 1000, n<3000) %>%
+  mutate(word=reorder(word,n)) %>%
+  ggplot(aes(word,n))+geom_col()+xlab(NULL)+coord_flip()
+  
+jobdat_word %>%
+  count(word, sort=TRUE) %>%
+  filter(n> 750, n<1000) %>%
+  mutate(word=reorder(word,n)) %>%
+  ggplot(aes(word,n))+geom_col()+xlab(NULL)+coord_flip()
+
+jobdat_word %>%
+  count(word, sort=TRUE) %>%
+  filter(n> 500, n<750) %>%
+  mutate(word=reorder(word,n)) %>%
+  ggplot(aes(word,n))+geom_col()+xlab(NULL)+coord_flip()
+
+jobdat %>%
+  count(industry, sort=TRUE) %>%
+  filter(n> 10) %>%
+  mutate(industry=reorder(industry,n)) %>%
+  ggplot(aes(industry,n))+geom_col()+xlab(NULL)+coord_flip()
+
+
+jobdat %>%
+  count(company_name, sort=TRUE) %>%
+  filter(n> 5) %>%
+  mutate(company_name=reorder(company_name,n)) %>%
+  ggplot(aes(company_name,n))+geom_col()+xlab(NULL)+coord_flip()
+
+
+```
+```{r plot of word cloud}
+library(wordcloud)
+
+jobdat_word %>%
+  count(word) %>%
+with(wordcloud(word,n,max.words=100))
+
+jobdat %>%
+  count(industry) %>%
+with(wordcloud(industry,n,max.words=100))
+
+jobdat %>%
+  count(company_name) %>%
+with(wordcloud(company_name,n,max.words=50))
+
+
+
+```
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
