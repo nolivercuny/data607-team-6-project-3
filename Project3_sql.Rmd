@@ -33,20 +33,52 @@ con <- dbConnect(RSQLite::SQLite(), dbname = ":memory:")
 ## Create Tables
 ```{r}
 baseUrl <- "https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/sql/"
-tables <- c("company.sql", "job_listing.sql")
+tables <- c("company", "job_listing", "job_listing_skill")
 for (table in tables) {
-  fileUrl <- paste(baseUrl, table,sep = "")
+  fileUrl <- paste(baseUrl, table,".sql",sep = "")
   createTableStatement <- getURL(fileUrl)
-  print(createTableStatement[1])
-  dbListTables(con)
-  dbSendQuery(con, createTableStatement[1])
-  dbListTables(con)
-  dbListFields(con, str_replace(table,".sql",""))
+  print(paste("Creating ", table, " table"))
+  dbSendQuery(con, createTableStatement)
 }
+```
+
+## Verify tables are created
+```{r}
+dbListTables(con)
+dbListFields(con, "job_listing")
+dbListFields(con, "company")
+```
+
+## Populate Tables
+
+### Load Data From CSV
+```{r}
+urlfile<-"https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/data/job_listings_final.csv" 
+jobdat <- read_csv(url(urlfile))
+
+#view short file summary and class
+jobdat<-data_frame(jobdat)
+```
+
+
+### Populate Company Table
+```{r}
+companiesDf <- jobdat %>% select(company_name, company_size, industry) %>% distinct()
+dbWriteTable(con,"company",companiesDf, append=TRUE)
+```
+
+### Populate Job Listing Table
+```{r}
+
+```
+
+### Populate Job Listing Skills Table
+```{r}
 
 ```
 
 
+## Close Connection
 ```{r}
 dbDisconnect(con)
 ```
