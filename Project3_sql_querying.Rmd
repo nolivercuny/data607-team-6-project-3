@@ -1,0 +1,46 @@
+---
+title: "Project 3 - SQL Queries"
+author: "Team 6"
+output:
+  prettydoc::html_pretty:
+    theme: hpstr
+    highlight: github
+  pdf_document: default
+editor_options: 
+  chunk_output_type: console
+---
+
+# Team 6 - Project 3 SQL
+
+This RMarkdown file contains the code to create and populate the SQLite database using the scraped data.
+
+## Load libraries
+```{r}
+# Database Interaction
+library(DBI)
+```
+
+
+## Connecting to DB
+
+For testing purposes use the in-memory database option. If you want to manipulate the real database comment the first line and uncomment the second line.
+```{r}
+
+dbLocation <-"./project3_job_skills.db"
+print(dbLocation)
+con <- dbConnect(RSQLite::SQLite(), dbname = dbLocation)
+```
+
+## Example Queries
+
+```{r}
+fbJobsDf <- dbGetQuery(con, "SELECT * FROM job_listing jl JOIN company c on c.id = jl.company_id JOIN job_listing_skill jls on jls.job_listing_id = jl.id where c.company_name = 'Facebook'")
+```
+
+
+
+## Close Connection
+```{r}
+dbDisconnect(con)
+```
+

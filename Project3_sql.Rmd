@@ -12,22 +12,27 @@ editor_options:
 
 # Team 6 - Project 3 SQL
 
+This RMarkdown file contains the code to create and populate the SQLite database using the scraped data.
 
-Load libraries
+## Load libraries
 ```{r}
 # Database Interaction
 library(DBI)
 # Pulling data from GH
 library(RCurl)
-#string manipulation
-library(stringr)
 ```
 
 
+## Creating Database
 
+For testing purposes use the in-memory database option. If you want to manipulate the real database comment the first line and uncomment the second line.
 ```{r}
+
+#For testing use in memory DB
 con <- dbConnect(RSQLite::SQLite(), dbname = ":memory:")
 
+#Uncomment to manipulate real DB
+#con <- dbConnect(RSQLite::SQLite(), dbname = "project3_job_skills.db")
 ```
 
 ## Create Tables
@@ -111,6 +116,17 @@ dbWriteTable(con,"job_listing_skill", joinedWords, append=TRUE)
 
 ```{r}
 fbJobsDf <- dbGetQuery(con, "SELECT * FROM job_listing jl JOIN company c on c.id = jl.company_id JOIN job_listing_skill jls on jls.job_listing_id = jl.id where c.company_name = 'Facebook'")
+```
+
+
+## Drop Tables
+
+Run this to remove the tables
+```{r}
+# removeTables <- tables <- c("job_listing_skill","job_listing","company")
+# for (table in tables) {
+#   dbRemoveTable(con, table)
+# }
 ```
 
 
