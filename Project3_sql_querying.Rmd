@@ -12,7 +12,7 @@ editor_options:
 
 # Team 6 - Project 3 SQL
 
-This RMarkdown file contains the code to create and populate the SQLite database using the scraped data.
+This RMarkdown file contains the code to connect to and query the existing database
 
 ## Load libraries
 ```{r}
@@ -25,8 +25,8 @@ library(DBI)
 
 For testing purposes use the in-memory database option. If you want to manipulate the real database comment the first line and uncomment the second line.
 ```{r}
-
-dbLocation <-"./project3_job_skills.db"
+# You may have to update this to the full path in order to get it to work
+dbLocation <-"project3_job_skills.db"
 print(dbLocation)
 con <- dbConnect(RSQLite::SQLite(), dbname = dbLocation)
 ```
