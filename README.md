@@ -1,5 +1,7 @@
 # Project – Data Science Skills
 
+## Project Requirements
+
 This is a project for your entire class section to work on together, since being able to work effectively on a virtual team is a key “soft skill” for data scientists. Please note especially the requirement about making a presentation during our first meetup after the project is due.
 
 W. Edwards Deming said, “In God we trust, all others must bring data.” Please use data to answer the question, “Which are the most valued data science skills?” Consider your work as an exploration; there is not necessarily a “right answer.”
@@ -21,3 +23,35 @@ Every student must be prepared to explain how the data was collected, loaded, tr
 You are encouraged to start early, ask many questions, actively post on the provided discussion forum, etc.
 
 One example graph: Top Forest Ranger Skills (based on number of resumes with specified skills). You are encouraged to come up with your own approach that may use different kinds of data sources.
+
+## Project Files
+
+### jobs-scraper
+
+Contains the code used to scrape the job listings from LinkendIn
+
+### sql
+
+Contains the raw create table statements used by the `Project3_sql.Rmd` file to create the tables in the SQLite database
+
+### data
+
+Contains the raw data files. Scraped data `job_listings_final.csv` and the parsed out skills `jobdata_words.csv`
+
+### Project 3_Job_data.Rmd
+
+Contains the `R` code that pulls the words from the job listing `description` field. 
+
+Also, writes that dataframe out to a `csv` called `jobdata_words.csv` that lives in the `data` folder
+
+### Project3_sql.Rmd
+
+Contains the `R` code for creating the database, tables, and populated the tables with data
+
+### Project3_sql_querying.Rmd
+
+Contains `R` code as example for how to connect to and query the database
+
+### project3_job_skills.db
+
+The `SQLite` database containing the job listing data broken out into 3 tables, `job_listing`, `company`, and `job_listing_skill`. 
