@@ -41,17 +41,34 @@ Create a short document, with the names of group members. You should briefly des
 |`column_name`|`data_type`|`attrs`|
 |---|---|---|
 |`id`|`int`|`pk`|
-|`source`|`text`|`not null`|
-|`date_posted`|`date`||
-|`company`|`text`||
+|`search_rank`|`int`|`not null`|
+|`job_title`|`text`|`not null`|
+|`region`|`text`|`not null`|
+|`applicant_count`|`int`|`null`|
+|`salary`|`text`|`null`|
+|`employment_type`|`text`|`not null`|
+|`career_level`|`text`|`null`|
+|`description`|`text`|`null`|
+|`date_queried`|`text`|`null`|
+|`date_posted`|`text`||
+|`company_id`|`int`|`fk`|
 
-`Job Listing Requirements`
+`Job Listing Skill`
 
 |`column_name`|`data_type`|`attrs`|
 |---|---|---|
 |`id`|`int`|`pk`|
 |`job_listing_id`|`int`|`fk`|
 |`skill`|`text`|`not null`|
+
+`Company`
+
+|`column_name`|`data_type`|`attrs`|
+|---|---|---|
+|`id`|`int`|`pk`|
+|`company_name`|`int`|`not null`|
+|`company_size`|`int`|`null`|
+|`industry`|`int`|`null`|
 
 ![Entity Relationship Diagram](./erd.png)
 
