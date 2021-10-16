@@ -111,6 +111,11 @@ jobdat %>%
 
 ```
 
+```{r}
+#write out the words csv so it can be used to load the database
+working_directory <- getwd()
+write_csv(jobdat_word,paste(working_directory, "/data/jobdata_words.csv",sep=""))
+```
 
 
 ```{r setup, include=FALSE}
