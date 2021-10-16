@@ -1,0 +1,51 @@
+---
+title: "Project 3 - SQL"
+author: "Team 6"
+output:
+  prettydoc::html_pretty:
+    theme: hpstr
+    highlight: github
+  pdf_document: default
+editor_options: 
+  chunk_output_type: console
+---
+
+# Team 6 - Project 3 SQL
+
+
+Load libraries
+```{r}
+library(DBI)
+```
+
+
+
+```{r}
+con <- dbConnect(RSQLite::SQLite(), dbname = ":memory:")
+
+```
+
+## Create Tables
+```{r}
+
+jobListingSql <- "CREATE TABLE job_listing(
+   id INTEGER PRIMARY KEY NOT NULL,
+   job_title TEXT NOT NULL,
+   company_name TEXT NOT NULL,
+   region TEXT NOT NULL,
+   applicant_count INTEGER NOT NULL,
+   budget_dollars REAL NOT NULL,
+   box_office_dollars REAL NOT NULL
+);"
+dbListTables(con)
+dbWriteTable(con, "mtcars", mtcars)
+dbListTables(con)
+dbListFields(con, "mtcars")
+dbReadTable(con, "mtcars")
+```
+
+
+```{r}
+dbDisconnect(con)
+```
+
