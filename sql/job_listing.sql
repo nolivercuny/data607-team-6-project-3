@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS job_listing(
     employment_type TEXT NOT NULL,
     career_level TEXT,
     description TEXT,
+    company_id INTEGER NOT NULL,
     date_queried TEXT NOT NULL,
     date_posted TEXT NOT NULL,
     FOREIGN KEY(company_id) REFERENCES company(id)

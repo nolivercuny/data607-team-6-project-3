@@ -19,6 +19,8 @@ Load libraries
 library(DBI)
 # Pulling data from GH
 library(RCurl)
+#string manipulation
+library(stringr)
 ```
 
 
@@ -31,13 +33,17 @@ con <- dbConnect(RSQLite::SQLite(), dbname = ":memory:")
 ## Create Tables
 ```{r}
 baseUrl <- "https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/sql/"
-fileUrl <- paste(baseUrl, "job_listing.sql",sep = "")
-jobListingSql <- getURL(file_url)
+tables <- c("company.sql", "job_listing.sql")
+for (table in tables) {
+  fileUrl <- paste(baseUrl, table,sep = "")
+  createTableStatement <- getURL(fileUrl)
+  print(createTableStatement[1])
+  dbListTables(con)
+  dbSendQuery(con, createTableStatement[1])
+  dbListTables(con)
+  dbListFields(con, str_replace(table,".sql",""))
+}
 
-dbListTables(con)
-dbSendQuery(con, jobListingSql)
-dbListTables(con)
-dbListFields(con, "job_listing")
 ```
 
 
