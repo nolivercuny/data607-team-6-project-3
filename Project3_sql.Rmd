@@ -15,7 +15,10 @@ editor_options:
 
 Load libraries
 ```{r}
+# Database Interaction
 library(DBI)
+# Pulling data from GH
+library(RCurl)
 ```
 
 
@@ -27,21 +30,14 @@ con <- dbConnect(RSQLite::SQLite(), dbname = ":memory:")
 
 ## Create Tables
 ```{r}
+baseUrl <- "https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/sql/"
+fileUrl <- paste(baseUrl, "job_listing.sql",sep = "")
+jobListingSql <- getURL(file_url)
 
-jobListingSql <- "CREATE TABLE job_listing(
-   id INTEGER PRIMARY KEY NOT NULL,
-   job_title TEXT NOT NULL,
-   company_name TEXT NOT NULL,
-   region TEXT NOT NULL,
-   applicant_count INTEGER NOT NULL,
-   budget_dollars REAL NOT NULL,
-   box_office_dollars REAL NOT NULL
-);"
 dbListTables(con)
-dbWriteTable(con, "mtcars", mtcars)
+dbSendQuery(con, jobListingSql)
 dbListTables(con)
-dbListFields(con, "mtcars")
-dbReadTable(con, "mtcars")
+dbListFields(con, "job_listing")
 ```
 
 
