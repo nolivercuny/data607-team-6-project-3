@@ -1,0 +1,90 @@
+---
+title: "Project 3 Skill Analysis"
+author: "Donald Butler"
+date: "10/15/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+  
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(tidytext)
+library(janeaustenr)
+```
+
+```{r}
+
+urlfile<-"https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/data/job_listings_final.csv" 
+jobdat <- read_csv(url(urlfile))
+
+#view short file summary and class
+jobdat<-data_frame(jobdat)
+glimpse(jobdat)
+
+```
+
+Created ngrams of 1, 2, and 3 words, filtered out the common stop_words, and then did a count of each and filtered down to the rows that occured at least 10 times within our description dataset. I then exported the results which contained 6015 rows to a file which I loaded into Excel to determine which were relevant job skills and which were not. 
+
+```{r text}
+
+jobdat_1gram <- jobdat %>%
+  unnest_tokens(ngram,description,token='ngrams',n=1,format='text',drop=TRUE,to_lower=TRUE) %>%
+  filter(!ngram %in% stop_words$word) %>%
+  count(ngram,sort = TRUE) %>%
+  filter(n >= 10)
+
+jobdat_2gram <- jobdat %>%
+  unnest_tokens(ngram,description,token='ngrams',n=2,format='text',drop=TRUE,to_lower=TRUE) %>%
+  separate(ngram,c('word1','word2'),sep = " ") %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word) %>%
+  unite(ngram, c('word1','word2'), sep = " ") %>%
+  count(ngram,sort = TRUE) %>%
+  filter(n >= 10)
+
+jobdat_3gram <- jobdat %>%
+  unnest_tokens(ngram,description,token='ngrams',n=3,format='text',drop=TRUE,to_lower=TRUE) %>%
+  separate(ngram,c('word1','word2','word3'),sep = " ") %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word) %>%
+  filter(!word3 %in% stop_words$word) %>%
+  unite(ngram, c('word1','word2','word3'), sep = " ") %>%
+  count(ngram,sort = TRUE) %>%
+  filter(n >= 10)
+
+jobdat_ngrams <- jobdat_1gram %>%
+  rbind(jobdat_2gram) %>%
+  rbind(jobdat_3gram) %>%
+  arrange(desc(n))
+
+head(jobdat_ngrams,25)
+
+jobdat_ngrams %>%
+  write.table(file = './jobdat_ngrams.csv',quote = FALSE, sep = '\t', row.names = FALSE)
+
+```
+
+I generated a file of applicable skills, along with common alternative spellings, ML & Machine Learning. On lines with multiple alternatives, they are separated by a pipe |, for RegEx comparison.
+
+```{r}
+
+(jobskills <- read_csv('https://raw.githubusercontent.com/dab31415/DATA607/main/Projects/Project_3/JobSkills.csv'))
+
+```
+
+I loop though the list of skills and use regex to determine if the skill is listed within the description text. A new attribute is created in the jobs data frame that indicates if the skill is required.
+
+```{r}
+
+for (i in 1:nrow(jobskills)) {
+  jobdat[,ncol(jobdat) + 1] <- str_detect(jobdat$description, regex(paste('[^A-Z0-9]',jobskills[i,1],'[^A-Z0-9]',sep = ''),ignore_case = TRUE))
+  colnames(jobdat)[ncol(jobdat)] <- as.character(jobskills[i,1])
+}
+
+glimpse(jobdat)
+
+```
