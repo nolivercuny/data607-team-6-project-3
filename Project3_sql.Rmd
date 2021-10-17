@@ -33,7 +33,7 @@ For testing purposes use the in-memory database option. If you want to manipulat
 con <- dbConnect(RSQLite::SQLite(), dbname = ":memory:")
 
 #Uncomment to manipulate real DB
-#con <- dbConnect(RSQLite::SQLite(), dbname = "project3_job_skills.db")
+# con <- dbConnect(RSQLite::SQLite(), dbname = "project3_job_skills.db")
 ```
 
 ## Create Tables
@@ -144,6 +144,7 @@ dbWriteTable(con,"job_listing_skill", skillsTableDf, append=TRUE)
 
 ```{r}
 fbJobsDf <- dbGetQuery(con, "SELECT * FROM job_listing jl JOIN company c on c.id = jl.company_id JOIN job_listing_skill jls on jls.job_listing_id = jl.id where c.company_name = 'Facebook'")
+glimpse(fbJobsDf)
 ```
 
 
