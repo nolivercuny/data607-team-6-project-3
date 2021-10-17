@@ -125,11 +125,14 @@ skillsDf <-data_frame(skillsData)
 
 ```{r}
 jobListingWithId <- dbReadTable(con,"job_listing")
-skillsTableDf <- data.frame("job_listing_id","skill")
-for (listing in jobListingWithId) {
-  for (skill in skillsDf) {
-    if(str_detect(listing$description, regex(paste('[^A-Z0-9]',skill,'[^A-Z0-9]',sep = ''),ignore_case = TRUE))==TRUE){
-      skillsTableDf %>% add_row(job_listing_id = listing$id, skill = skill)
+skillsTableDf <- data.frame(job_listing_id=integer(), skill=character())
+for (i in 1:nrow(jobListingWithId)) {
+  listing <- jobListingWithId[i,]
+  for (j in 1:nrow(skillsDf)) {
+    skill <- skillsDf[j,]
+    detected <- str_detect(listing$description, regex(paste('[^A-Z0-9]',skill,'[^A-Z0-9]',sep = ''),ignore_case = TRUE))
+    if(detected==TRUE){
+      skillsTableDf <- skillsTableDf %>% add_row(job_listing_id = listing$id, skill = skill$JobSkill)
     }
   }
 }
