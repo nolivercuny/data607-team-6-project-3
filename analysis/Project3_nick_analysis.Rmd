@@ -84,6 +84,11 @@ joinedDf %>%
 
 ## What Companies Do Not Require The Most Popular Skill?
 
+- First find the most popular skill by counting the number of listings that require a skill and selecting the top 1
+- Next select all of the job listings and their required skills
+- Group the listing such that all the skills required by the listing are a single string in one `skills` column
+- Filter all the listings down to only listings where the `skills` column does not contain the most popular skill `Python`
+
 ```{r}
 topSkillDf <- dbGetQuery(con,"select count(1), skill
 from job_listing_skill
@@ -105,9 +110,22 @@ noPythonJobsDf <- groupedSkillsDf %>% filter(!grepl("Python", skills))
 
 print(scales::percent(nrow(noPythonJobsDf) / nrow(groupedSkillsDf)))
 
+noPythonNoDataInJobTitle <- noPythonJobsDf %>% filter(grepl("Data", job_title, ignore.case=TRUE))
+
+print(scales::percent(nrow(noPythonNoDataInJobTitle) / nrow(groupedSkillsDf)))
+
+
+noPythonNoDataInJobTitle %>% 
+  arrange(company_name) %>%
+  kable(caption = "Data Jobs Not Requiring Python", format = "html",col.names = c("Id", "Company Name", "Job Title", "Salary", "Skills")) %>% 
+  kable_styling("striped", "hover") %>% 
+  scroll_box(width = "100%", height="600px")
+  
 ```
 
-**Roughly 28% of the jobs do not require python.**
+Roughly `28%` of the jobs do not require Python but looking at the job titles I noticed that many of the jobs were not exactly data related. For example I noticed postings for `C# Software Developer` which understandably would likely not require Python as a skill. 
+
+Filtering down the list to jobs that contain `Data` in the job title I found that only `18%` of those jobs do not require Python. 
 
 ## Teardown
 

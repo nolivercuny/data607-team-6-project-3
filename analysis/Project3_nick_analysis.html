@@ -166,6 +166,12 @@ a.sourceLine {
 </div>
 <div id="which-companies-require-the-most-skills" class="section level2">
 <h2>Which companies require the most skills?</h2>
+<ul>
+<li>Select job listings grouped by company and count the number of skills required.</li>
+<li>Then select number of job listings by company.</li>
+<li>Join the two dataframes and add a column which is the mean number of skills required by taking the total number of required skills divided by the total number of listings</li>
+<li>Then arrage by higest number of skills required, select to 10, and put in a table.</li>
+</ul>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>companySkillsCountDf <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">&quot;select c.company_name, count(jls.skill) as required_skills</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="st">from job_listing jl</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">join job_listing_skill jls on jl.id = jls.job_listing_id</span></span>
@@ -182,16 +188,16 @@ a.sourceLine {
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="st">order by number_job_listings desc; &quot;</span>)</span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>joinedDf <span class="ot">&lt;-</span> <span class="fu">left_join</span>(companyJobListingsCountDf, companySkillsCountDf, <span class="at">by=</span><span class="st">&quot;company_name&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_skills_per_listing =</span> <span class="fu">round</span>(required_skills <span class="sc">/</span> number_job_listings)) <span class="sc">%&gt;%</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mean_skills_per_listing))</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_skills_per_listing =</span> <span class="fu">round</span>(required_skills <span class="sc">/</span> number_job_listings))</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>joinedDf <span class="sc">%&gt;%</span> </span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(company_name, mean_skills_per_listing) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">top_n</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Companies Requiring Most Skills&quot;</span>, <span class="at">format =</span> <span class="st">&quot;html&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
-<pre><code>## Selecting by mean_skills_per_listing</code></pre>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mean_skills_per_listing)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">top_n</span>(<span class="dv">10</span>, mean_skills_per_listing) <span class="sc">%&gt;%</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Companies Requiring Most Skills&quot;</span>, <span class="at">format =</span> <span class="st">&quot;html&quot;</span>, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Company Name&quot;</span>, <span class="st">&quot;Mean Number Skills Required&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
@@ -200,10 +206,10 @@ Companies Requiring Most Skills
 <thead>
 <tr>
 <th style="text-align:left;">
-company_name
+Company Name
 </th>
 <th style="text-align:right;">
-mean_skills_per_listing
+Mean Number Skills Required
 </th>
 </tr>
 </thead>
@@ -331,12 +337,2797 @@ BMC Software
 </tbody>
 </table>
 </div>
+<div id="which-companies-require-fewest-skills" class="section level3">
+<h3>Which companies require fewest skills?</h3>
+<ul>
+<li>Take the same dataframe as above except arrange in reverse order and take the bottom 10 companies</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>joinedDf <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(company_name, mean_skills_per_listing) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(mean_skills_per_listing) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">top_n</span>(<span class="sc">-</span><span class="dv">10</span>,mean_skills_per_listing) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Companies Requiring Fewest Skills&quot;</span>, <span class="at">format =</span> <span class="st">&quot;html&quot;</span>, <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Company Name&quot;</span>, <span class="st">&quot;Mean Number Skills Required&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+Companies Requiring Fewest Skills
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Company Name
+</th>
+<th style="text-align:right;">
+Mean Number Skills Required
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Bleacher Report
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+loanDepot
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yotta
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+RevaComm
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+RedStream Technology
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Raymond Search Group
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ProSight
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pollen
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Northwestern Mutual
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Naval Nuclear Laboratory (FMP)
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+National Grid
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hillrom
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hector Ventures LLC
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Colgate-Palmolive
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Church &amp; Dwight Co., Inc. 
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bread
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Angi
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="what-companies-do-not-require-the-most-popular-skill" class="section level2">
+<h2>What Companies Do Not Require The Most Popular Skill?</h2>
+<ul>
+<li>First find the most popular skill by counting the number of listings that require a skill and selecting the top 1</li>
+<li>Next select all of the job listings and their required skills</li>
+<li>Group the listing such that all the skills required by the listing are a single string in one <code>skills</code> column</li>
+<li>Filter all the listings down to only listings where the <code>skills</code> column does not contain the most popular skill <code>Python</code></li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>topSkillDf <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con,<span class="st">&quot;select count(1), skill</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">from job_listing_skill</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">group by skill</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="st">order by count(1) desc</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="st">limit 1;&quot;</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(topSkillDf<span class="sc">$</span>skill)</span></code></pre></div>
+<pre><code>## [1] &quot;Python&quot;</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>allListingsDf <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">&quot;select jl.id, jl.job_title, c.company_name, jls.skill, jl.salary</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="st">from job_listing jl</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">join company c on c.id = jl.company_id</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="st">join job_listing_skill jls on jl.id = jls.job_listing_id;&quot;</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>groupedSkillsDf <span class="ot">&lt;-</span> allListingsDf <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(id, company_name, job_title, salary) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">skills =</span> <span class="fu">paste</span>(skill, <span class="at">collapse =</span> <span class="st">&quot;,&quot;</span>))</span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by &#39;id&#39;, &#39;company_name&#39;, &#39;job_title&#39;. You can override using the `.groups` argument.</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>noPythonJobsDf <span class="ot">&lt;-</span> groupedSkillsDf <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">grepl</span>(<span class="st">&quot;Python&quot;</span>, skills))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(scales<span class="sc">::</span><span class="fu">percent</span>(<span class="fu">nrow</span>(noPythonJobsDf) <span class="sc">/</span> <span class="fu">nrow</span>(groupedSkillsDf)))</span></code></pre></div>
+<pre><code>## [1] &quot;28%&quot;</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>noPythonNoDataInJobTitle <span class="ot">&lt;-</span> noPythonJobsDf <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">&quot;Data&quot;</span>, job_title, <span class="at">ignore.case=</span><span class="cn">TRUE</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(scales<span class="sc">::</span><span class="fu">percent</span>(<span class="fu">nrow</span>(noPythonNoDataInJobTitle) <span class="sc">/</span> <span class="fu">nrow</span>(groupedSkillsDf)))</span></code></pre></div>
+<pre><code>## [1] &quot;18%&quot;</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>noPythonNoDataInJobTitle <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(company_name) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Data Jobs Not Requiring Python&quot;</span>, <span class="at">format =</span> <span class="st">&quot;html&quot;</span>,<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Id&quot;</span>, <span class="st">&quot;Company Name&quot;</span>, <span class="st">&quot;Job Title&quot;</span>, <span class="st">&quot;Salary&quot;</span>, <span class="st">&quot;Skills&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>, <span class="at">height=</span><span class="st">&quot;600px&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:600px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+Data Jobs Not Requiring Python
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Id
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+Company Name
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+Job Title
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+Salary
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+Skills
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+815
+</td>
+<td style="text-align:left;">
+Aderant
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Azure,CS|Computer Science,Data Analysis,Data Mining,Data Visualization,Excel,NLP|Language Processing,ML|Machine Learning,Math|Mathematics,Models|Modeling,R,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+575
+</td>
+<td style="text-align:left;">
+AKUR8
+</td>
+<td style="text-align:left;">
+Actuarial Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,CS|Computer Science,ML|Machine Learning,Models|Modeling,R
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+791
+</td>
+<td style="text-align:left;">
+Amazon
+</td>
+<td style="text-align:left;">
+Principal Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,CS|Computer Science,Data Modeling,ETL|Extact, Transform, and Load,ML|Machine Learning,Math|Mathematics,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+812
+</td>
+<td style="text-align:left;">
+Atlas Air
+</td>
+<td style="text-align:left;">
+SMS / SRC Data Analyst
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Data Mining,Database|Databases,Excel,Models|Modeling,PowerPoint,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+731
+</td>
+<td style="text-align:left;">
+Atrium
+</td>
+<td style="text-align:left;">
+Junior Data Analyst
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Data Analysis,Excel
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+790
+</td>
+<td style="text-align:left;">
+Atrium
+</td>
+<td style="text-align:left;">
+Junior Data Analyst
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Data Analysis,Excel
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+197
+</td>
+<td style="text-align:left;">
+Attentive
+</td>
+<td style="text-align:left;">
+Senior Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+ML|Machine Learning,Models|Modeling
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+784
+</td>
+<td style="text-align:left;">
+Avanade
+</td>
+<td style="text-align:left;">
+Entry-Level, Data Engineer-Northeast
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Advanced Analytics,Data Mining,Data Warehouse,Database|Databases,Excel,Models|Modeling,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+199
+</td>
+<td style="text-align:left;">
+Bigfoot Biomedical
+</td>
+<td style="text-align:left;">
+Senior Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Agile,Linux|Unix,Math|Mathematics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+251
+</td>
+<td style="text-align:left;">
+Bigfoot Biomedical
+</td>
+<td style="text-align:left;">
+Principal Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Agile,Linux|Unix,Math|Mathematics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+606
+</td>
+<td style="text-align:left;">
+Bigfoot Biomedical
+</td>
+<td style="text-align:left;">
+Principal Physiological Time Series Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Agile,Linux|Unix,Math|Mathematics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:left;">
+Bloomberg LP
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Data Visualization,Excel,Git|Github,NLP|Language Processing,ML|Machine Learning,SQL,Statistics|Statistical,Time Series
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:left;">
+Bloomberg LP
+</td>
+<td style="text-align:left;">
+UX Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,ML|Machine Learning,Math|Mathematics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+311
+</td>
+<td style="text-align:left;">
+Bluecore
+</td>
+<td style="text-align:left;">
+Senior Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Bayesian,Deep Learning,NLP|Language Processing,ML|Machine Learning,Math|Mathematics,Models|Modeling,Physics,SQL,Statistics|Statistical,Time Series
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+347
+</td>
+<td style="text-align:left;">
+Bluecore
+</td>
+<td style="text-align:left;">
+Principal Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Bayesian,Deep Learning,NLP|Language Processing,ML|Machine Learning,Math|Mathematics,Models|Modeling,Physics,SQL,Statistics|Statistical,Time Series
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+570
+</td>
+<td style="text-align:left;">
+Boehringer Ingelheim
+</td>
+<td style="text-align:left;">
+Senior Clinical Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Math|Mathematics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+393
+</td>
+<td style="text-align:left;">
+Brooks Brothers
+</td>
+<td style="text-align:left;">
+Data Scientist Manager
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Advanced Analytics,Critical Thinking,Data Mining,Database|Databases,Excel,Models|Modeling,R,SAS,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+665
+</td>
+<td style="text-align:left;">
+Cardinal Health
+</td>
+<td style="text-align:left;">
+Senior Data Scientist, Advanced Analytics and Machine Learning
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Advanced Analytics,Agile,AI|Artificial Intelligence,CS|Computer Science,Data Mining,Data Modeling,Data Warehouse,Google Cloud,ML|Machine Learning,Math|Mathematics,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+169
+</td>
+<td style="text-align:left;">
+Citi
+</td>
+<td style="text-align:left;">
+GPO - Data remediation analyst
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Agile,Data Warehouse,Database|Databases,Excel,PowerPoint
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+221
+</td>
+<td style="text-align:left;">
+Citi
+</td>
+<td style="text-align:left;">
+Data Analytics Intmd Analyst
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Data Analysis,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+713
+</td>
+<td style="text-align:left;">
+Citi
+</td>
+<td style="text-align:left;">
+Data Analyst
+</td>
+<td style="text-align:left;">
+$63,000/yr - $128,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+Data Analysis,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+849
+</td>
+<td style="text-align:left;">
+Citi
+</td>
+<td style="text-align:left;">
+Data Scientist - VP
+</td>
+<td style="text-align:left;">
+$88,000/yr - $185,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+Data Analysis,Data Mining,Math|Mathematics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+102
+</td>
+<td style="text-align:left;">
+CVS Health
+</td>
+<td style="text-align:left;">
+Senior Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Advanced Analytics,CS|Computer Science,ML|Machine Learning,Math|Mathematics,Models|Modeling,Physics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+472
+</td>
+<td style="text-align:left;">
+CVS Health
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Data Modeling,Data Structures,Data Visualization,ML|Machine Learning,Math|Mathematics,Models|Modeling,Physics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+465
+</td>
+<td style="text-align:left;">
+Daiichi Sankyo, Inc. 
+</td>
+<td style="text-align:left;">
+Data Scientist, R&amp;D Excellence
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Advanced Analytics,Data Analysis,Excel,Models|Modeling,PowerPoint,R,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+28
+</td>
+<td style="text-align:left;">
+Dice
+</td>
+<td style="text-align:left;">
+Data Scientist/Engineer (Remote)
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Azure,Data Modeling,Database|Databases,Math|Mathematics,Models|Modeling,Power BI,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+37
+</td>
+<td style="text-align:left;">
+Dice
+</td>
+<td style="text-align:left;">
+Data Analyst– 100% Remote Work
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Critical Thinking,Data Analysis,Database|Databases,ETL|Extact, Transform, and Load,MySQL,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+45
+</td>
+<td style="text-align:left;">
+Dice
+</td>
+<td style="text-align:left;">
+Junior/Mid-Level Data Engineer
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Database|Databases,Excel
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+283
+</td>
+<td style="text-align:left;">
+Dice
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Data Warehouse,ETL|Extact, Transform, and Load,Excel,Models|Modeling,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+391
+</td>
+<td style="text-align:left;">
+Dice
+</td>
+<td style="text-align:left;">
+Insurance Data Analyst Position
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Advanced Analytics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+549
+</td>
+<td style="text-align:left;">
+Dice
+</td>
+<td style="text-align:left;">
+REMOTE - Tableau Data Analyst
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Data Analysis,Data Warehouse,ETL|Extact, Transform, and Load,Excel,SQL,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+552
+</td>
+<td style="text-align:left;">
+Dice
+</td>
+<td style="text-align:left;">
+[707] Senior Data Scientist - FULLY REMOTE
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Deep Learning,ML|Machine Learning,Math|Mathematics,Models|Modeling,Physics,SQL,Statistics|Statistical,Time Series
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+786
+</td>
+<td style="text-align:left;">
+Dice
+</td>
+<td style="text-align:left;">
+E-commerce Data Analyst-100% remote (PST Hours)
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+109
+</td>
+<td style="text-align:left;">
+Dots
+</td>
+<td style="text-align:left;">
+Senior Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+ML|Machine Learning,Models|Modeling,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+351
+</td>
+<td style="text-align:left;">
+Dow Jones
+</td>
+<td style="text-align:left;">
+Data Scientist, Barron’s Group
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Data Analysis,ML|Machine Learning,Models|Modeling,SQL,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+420
+</td>
+<td style="text-align:left;">
+Egnyte
+</td>
+<td style="text-align:left;">
+Lead Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Data Mining,Database|Databases,Deep Learning,Google Cloud,Java,NLP|Language Processing,ML|Machine Learning,Models|Modeling,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+345
+</td>
+<td style="text-align:left;">
+Eli Lilly and Company
+</td>
+<td style="text-align:left;">
+Senior Process Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Data Analysis,Data Visualization,Database|Databases,R,SAS,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+469
+</td>
+<td style="text-align:left;">
+Emergent Holdings
+</td>
+<td style="text-align:left;">
+(REMOTE) Data Scientist I, Medicare Advantage
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Data Mining,Database|Databases,ML|Machine Learning,Math|Mathematics,Models|Modeling,R,SAS,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+737
+</td>
+<td style="text-align:left;">
+EY
+</td>
+<td style="text-align:left;">
+Data Analyst - Tech Consulting Staff
+</td>
+<td style="text-align:left;">
+$62,000/yr - $96,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+Agile,AWS|Amazon Web Services,Critical Thinking,Data Visualization,Database|Databases,Models|Modeling,SQL,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+738
+</td>
+<td style="text-align:left;">
+EY
+</td>
+<td style="text-align:left;">
+Data Analyst - Tech Consulting Staff
+</td>
+<td style="text-align:left;">
+$62,000/yr - $96,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+Agile,AWS|Amazon Web Services,Critical Thinking,Data Visualization,Database|Databases,Models|Modeling,SQL,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+739
+</td>
+<td style="text-align:left;">
+EY
+</td>
+<td style="text-align:left;">
+Data Analyst - Tech Consulting Staff
+</td>
+<td style="text-align:left;">
+$62,000/yr - $96,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+Agile,AWS|Amazon Web Services,Critical Thinking,Data Visualization,Database|Databases,Models|Modeling,SQL,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+798
+</td>
+<td style="text-align:left;">
+EY
+</td>
+<td style="text-align:left;">
+Data Analyst - Tech Consulting Staff
+</td>
+<td style="text-align:left;">
+$62,000/yr - $96,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+Agile,AWS|Amazon Web Services,Critical Thinking,Data Visualization,Database|Databases,Models|Modeling,SQL,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+326
+</td>
+<td style="text-align:left;">
+Facebook
+</td>
+<td style="text-align:left;">
+Data Scientist, Analytics – Music Ranking
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+ML|Machine Learning,Models|Modeling,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+526
+</td>
+<td style="text-align:left;">
+Facebook
+</td>
+<td style="text-align:left;">
+Data Scientist, Analytics - FB Creators Ecosystem
+</td>
+<td style="text-align:left;">
+$123,000/yr - $219,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+631
+</td>
+<td style="text-align:left;">
+Facebook
+</td>
+<td style="text-align:left;">
+Data Scientist, Product Analytics - Shops Buyer Ecosystem
+</td>
+<td style="text-align:left;">
+$123,000/yr - $219,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+R,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+657
+</td>
+<td style="text-align:left;">
+Facebook
+</td>
+<td style="text-align:left;">
+Data Scientist, Product Analytics - Shops Buyer Ecosystem
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+R,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+205
+</td>
+<td style="text-align:left;">
+Flatiron School
+</td>
+<td style="text-align:left;">
+Data Analyst
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Visualization,Database|Databases,Git|Github,R,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+340
+</td>
+<td style="text-align:left;">
+Fusion Risk Management
+</td>
+<td style="text-align:left;">
+Senior Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Agile,CS|Computer Science,Database|Databases,ML|Machine Learning,Math|Mathematics,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+296
+</td>
+<td style="text-align:left;">
+Galileo Financial Technologies
+</td>
+<td style="text-align:left;">
+Staff Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AWS|Amazon Web Services,CS|Computer Science,Excel,ML|Machine Learning,Models|Modeling,Pandas
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+813
+</td>
+<td style="text-align:left;">
+Getinge
+</td>
+<td style="text-align:left;">
+Sales Data Analyst I
+</td>
+<td style="text-align:left;">
+$54,000/yr - $76,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+Critical Thinking,Data Analysis,Database|Databases,Excel
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:left;">
+Google
+</td>
+<td style="text-align:left;">
+Data Analyst, YouTube Ads Finance
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Data Analysis,Math|Mathematics,Models|Modeling,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+72
+</td>
+<td style="text-align:left;">
+Gopuff
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Advanced Analytics,CS|Computer Science,ML|Machine Learning,Math|Mathematics,Models|Modeling,R,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+328
+</td>
+<td style="text-align:left;">
+Gopuff
+</td>
+<td style="text-align:left;">
+Principal Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,ML|Machine Learning,Math|Mathematics,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+333
+</td>
+<td style="text-align:left;">
+Grand Rounds Health
+</td>
+<td style="text-align:left;">
+Senior/Staff Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AWS|Amazon Web Services,Cloud Computing,CS|Computer Science,Database|Databases,Google Cloud,ML|Machine Learning,Math|Mathematics,Models|Modeling,Physics,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+100
+</td>
+<td style="text-align:left;">
+GroupM
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Agile,Azure,Cloud Computing,Data Mining,Decision Trees,ML|Machine Learning,Math|Mathematics,Models|Modeling,Pandas,Physics,SAS,Scipy,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+241
+</td>
+<td style="text-align:left;">
+Grow Therapy
+</td>
+<td style="text-align:left;">
+Founding Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Critical Thinking,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+715
+</td>
+<td style="text-align:left;">
+Guidewire Software
+</td>
+<td style="text-align:left;">
+Senior Modeler/Senior Data Scientist, Cyber Risk Analytics (supply chain) US Remote Option
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,AWS|Amazon Web Services,Data Analysis,Data Visualization,ML|Machine Learning,Math|Mathematics,Models|Modeling,R,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+735
+</td>
+<td style="text-align:left;">
+Guidewire Software
+</td>
+<td style="text-align:left;">
+Principal Modeler/Principal Data Scientist , Cyber Risk (Supply Chain) US Remote Option
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,AWS|Amazon Web Services,Data Analysis,Data Visualization,ML|Machine Learning,Math|Mathematics,Models|Modeling,R,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+679
+</td>
+<td style="text-align:left;">
+H&amp;M Group
+</td>
+<td style="text-align:left;">
+Lead Data Scientist, Machine Learning Enrichment
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Advanced Analytics,Agile,AI|Artificial Intelligence,CS|Computer Science,ML|Machine Learning,Math|Mathematics,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+511
+</td>
+<td style="text-align:left;">
+Hopper
+</td>
+<td style="text-align:left;">
+Senior Data Scientist, Virtual Interlining
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,AWS|Amazon Web Services,Azure,Cloud Computing,CS|Computer Science,Data Mining,Database|Databases,ML|Machine Learning,Math|Mathematics,Models|Modeling,Pandas,R,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+558
+</td>
+<td style="text-align:left;">
+Hopper
+</td>
+<td style="text-align:left;">
+Sr Data Scientist, Hotels Marketplace
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,CS|Computer Science,Data Mining,Database|Databases,Linux|Unix,ML|Machine Learning,Math|Mathematics,Pandas,R,SAS,SQL,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+568
+</td>
+<td style="text-align:left;">
+Hopper
+</td>
+<td style="text-align:left;">
+Sr Data Scientist, Hotels Marketplace
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,CS|Computer Science,Data Mining,Database|Databases,Linux|Unix,ML|Machine Learning,Math|Mathematics,Pandas,R,SAS,SQL,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+145
+</td>
+<td style="text-align:left;">
+IBM
+</td>
+<td style="text-align:left;">
+Advisory Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Decision Trees,ML|Machine Learning,Math|Mathematics,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+830
+</td>
+<td style="text-align:left;">
+IBM
+</td>
+<td style="text-align:left;">
+Program Manager, Analyst Relations for Data &amp; AI
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+144
+</td>
+<td style="text-align:left;">
+iboss
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+$0/yr
+</td>
+<td style="text-align:left;">
+CS|Computer Science,ML|Machine Learning,Models|Modeling
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+ICON plc
+</td>
+<td style="text-align:left;">
+Lab Data Analyst I
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Database|Databases,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+608
+</td>
+<td style="text-align:left;">
+Integra Managed Care
+</td>
+<td style="text-align:left;">
+Encounter Data Analyst
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Data Analysis,Data Warehouse,Database|Databases,Excel,ML|Machine Learning,PowerPoint,SAS,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+301
+</td>
+<td style="text-align:left;">
+Intelletec
+</td>
+<td style="text-align:left;">
+Data Scientist | Exciting Series C Startup!
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Bayesian,Math|Mathematics,Models|Modeling
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+751
+</td>
+<td style="text-align:left;">
+Itemize
+</td>
+<td style="text-align:left;">
+Machine Learning Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,API|Application Programming Interface,AWS|Amazon Web Services,CS|Computer Science,Database|Databases,Deep Learning,Git|Github,Linux|Unix,ML|Machine Learning,Models|Modeling,Numpy,Pandas,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+229
+</td>
+<td style="text-align:left;">
+Key Data Dashboard
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Data Mining,Database|Databases,Deep Learning,Google Cloud,ML|Machine Learning,Math|Mathematics,Models|Modeling,MySQL,Physics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+622
+</td>
+<td style="text-align:left;">
+Komodo Health
+</td>
+<td style="text-align:left;">
+Senior Data Scientist, Client Services
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Agile,Database|Databases,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+647
+</td>
+<td style="text-align:left;">
+Komodo Health
+</td>
+<td style="text-align:left;">
+Senior Data Scientist, Client Services
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Agile,Database|Databases,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+88
+</td>
+<td style="text-align:left;">
+L’Oréal
+</td>
+<td style="text-align:left;">
+Senior Clinician and Data Coordination Senior Scientist, L’Oréal Research &amp; Innovation
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Biology,Data Analysis,R,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+699
+</td>
+<td style="text-align:left;">
+LG Electronics North America
+</td>
+<td style="text-align:left;">
+Supply Chain Data Scientist (Bilingual English/Korean)
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Mining,Data Visualization,Deep Learning,ML|Machine Learning,Math|Mathematics,Models|Modeling,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+LifeBell AI
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+$130,000/yr - $150,000/yr
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,CS|Computer Science,Database|Databases,ML|Machine Learning,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+787
+</td>
+<td style="text-align:left;">
+loanDepot
+</td>
+<td style="text-align:left;">
+Loan Boarding Data Analyst
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Data Analysis
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+421
+</td>
+<td style="text-align:left;">
+M2GEN
+</td>
+<td style="text-align:left;">
+Informatics Data Scientist Lead
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Bioinformatics,Biology,Data Analysis,Data Visualization,Database|Databases
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+330
+</td>
+<td style="text-align:left;">
+Macy’s
+</td>
+<td style="text-align:left;">
+Senior Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Advanced Analytics,Agile,AI|Artificial Intelligence,Google Cloud,ML|Machine Learning,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+331
+</td>
+<td style="text-align:left;">
+Macy’s
+</td>
+<td style="text-align:left;">
+Senior Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Advanced Analytics,Agile,AI|Artificial Intelligence,Google Cloud,ML|Machine Learning,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+741
+</td>
+<td style="text-align:left;">
+Macy’s
+</td>
+<td style="text-align:left;">
+Senior, Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Advanced Analytics,Agile,AI|Artificial Intelligence,Google Cloud,ML|Machine Learning,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+742
+</td>
+<td style="text-align:left;">
+Macy’s
+</td>
+<td style="text-align:left;">
+Senior, Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Advanced Analytics,Agile,AI|Artificial Intelligence,Google Cloud,ML|Machine Learning,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+733
+</td>
+<td style="text-align:left;">
+McAfee
+</td>
+<td style="text-align:left;">
+Sr. Data Scientist - Experimentation
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Bayesian,Data Warehouse,Models|Modeling,MySQL,R,SAS,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+409
+</td>
+<td style="text-align:left;">
+National Grid
+</td>
+<td style="text-align:left;">
+Summer 2022 Intern Program: Long Island, NY(Business, IT, Data Science &amp; Environmental Majors)
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+725
+</td>
+<td style="text-align:left;">
+naviHealth
+</td>
+<td style="text-align:left;">
+Data Exchange Analyst
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+554
+</td>
+<td style="text-align:left;">
+NewYork-Presbyterian Hospital
+</td>
+<td style="text-align:left;">
+Data Scientist - Dalio Center for Health Justice
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Database|Databases,ML|Machine Learning,Models|Modeling,noSQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+646
+</td>
+<td style="text-align:left;">
+NYU Langone Health
+</td>
+<td style="text-align:left;">
+Data Analyst
+</td>
+<td style="text-align:left;">
+$50,000/yr - $87,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Excel,SAS
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+823
+</td>
+<td style="text-align:left;">
+NYU Langone Health
+</td>
+<td style="text-align:left;">
+Data Analyst - FHC
+</td>
+<td style="text-align:left;">
+$50,000/yr - $87,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+Database|Databases,Excel,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:left;">
+Oscar Health
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+ML|Machine Learning,Models|Modeling,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+288
+</td>
+<td style="text-align:left;">
+Oscar Health
+</td>
+<td style="text-align:left;">
+Senior Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Models|Modeling,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+508
+</td>
+<td style="text-align:left;">
+Oscar Health
+</td>
+<td style="text-align:left;">
+Senior Data Scientist, Product Analytics
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Models|Modeling,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+644
+</td>
+<td style="text-align:left;">
+Oscar Health
+</td>
+<td style="text-align:left;">
+Senior Data Scientist, Utilization Management
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Models|Modeling,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+683
+</td>
+<td style="text-align:left;">
+Oscar Health
+</td>
+<td style="text-align:left;">
+Senior Data Scientist, Utilization Management - Remote
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Models|Modeling,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+105
+</td>
+<td style="text-align:left;">
+Pfizer
+</td>
+<td style="text-align:left;">
+Data Management - Clinical Data Scientist
+</td>
+<td style="text-align:left;">
+$101,000/yr - $155,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+Data Visualization,Database|Databases,Excel
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+521
+</td>
+<td style="text-align:left;">
+Plume Design, Inc
+</td>
+<td style="text-align:left;">
+Sr. Data Scientist - Wearables
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Data Analysis,ML|Machine Learning,Models|Modeling,Physics,Statistics|Statistical,Time Series
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+490
+</td>
+<td style="text-align:left;">
+Pollen
+</td>
+<td style="text-align:left;">
+Senior Data Scientist - Marketing Science
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+615
+</td>
+<td style="text-align:left;">
+Quantitative Systems
+</td>
+<td style="text-align:left;">
+Digital Principal Data Scientist
+</td>
+<td style="text-align:left;">
+$200,000/yr - $350,000/yr
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,CS|Computer Science,ML|Machine Learning,Math|Mathematics,Models|Modeling,R,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+660
+</td>
+<td style="text-align:left;">
+Quiq
+</td>
+<td style="text-align:left;">
+Sr Data Scientist – Advanced Conversational Techniques
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Deep Learning,NLP|Language Processing,ML|Machine Learning,Models|Modeling
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+529
+</td>
+<td style="text-align:left;">
+Raymond Search Group
+</td>
+<td style="text-align:left;">
+REMOTE Data Scientist - MMA/Boxing/Jiu Jitsu fans welcome to apply
+</td>
+<td style="text-align:left;">
+$100,000/yr - $110,000/yr
+</td>
+<td style="text-align:left;">
+Database|Databases
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+645
+</td>
+<td style="text-align:left;">
+Regeneron
+</td>
+<td style="text-align:left;">
+Summer 2022 Intern – Bioinformatics, Biostatistics, Statistics, Mathematics, Data Science Majors (Tarrytown, NY Region)
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Bioinformatics,Math|Mathematics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+623
+</td>
+<td style="text-align:left;">
+Roku Inc. 
+</td>
+<td style="text-align:left;">
+Senior Data Scientist, Content Distribution
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Data Visualization,Math|Mathematics,Physics,R,SQL,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+612
+</td>
+<td style="text-align:left;">
+Root Inc. 
+</td>
+<td style="text-align:left;">
+Senior Data Scientist, Pricing R&amp;D
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AWS|Amazon Web Services,ML|Machine Learning,Models|Modeling,R,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+336
+</td>
+<td style="text-align:left;">
+S&amp;P Global Market Intelligence
+</td>
+<td style="text-align:left;">
+Sr. Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,NLP|Language Processing,ML|Machine Learning,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+83
+</td>
+<td style="text-align:left;">
+Sia Partners
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Data Visualization,NLP|Language Processing,ML|Machine Learning,Models|Modeling,R,SQL,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+344
+</td>
+<td style="text-align:left;">
+Signifyd
+</td>
+<td style="text-align:left;">
+Senior Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,CS|Computer Science,Linux|Unix,ML|Machine Learning,Models|Modeling,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+386
+</td>
+<td style="text-align:left;">
+Signifyd
+</td>
+<td style="text-align:left;">
+Senior Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,CS|Computer Science,Linux|Unix,ML|Machine Learning,Models|Modeling,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+315
+</td>
+<td style="text-align:left;">
+Socure
+</td>
+<td style="text-align:left;">
+Senior Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Deep Learning,Excel,NLP|Language Processing,ML|Machine Learning
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+352
+</td>
+<td style="text-align:left;">
+Spotify
+</td>
+<td style="text-align:left;">
+Data Scientist - Productivity Engineering Insights
+</td>
+<td style="text-align:left;">
+$115,000/yr - $152,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+Advanced Analytics,CS|Computer Science,Math|Mathematics,Pandas,R,SQL,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+444
+</td>
+<td style="text-align:left;">
+Spotify
+</td>
+<td style="text-align:left;">
+Senior Data Scientist - Personalization
+</td>
+<td style="text-align:left;">
+$130,000/yr - $195,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+Math|Mathematics,Models|Modeling,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+198
+</td>
+<td style="text-align:left;">
+Stitch Fix
+</td>
+<td style="text-align:left;">
+Data Scientist - Freestyle Outfits
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,CS|Computer Science,ML|Machine Learning,Models|Modeling,Physics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+220
+</td>
+<td style="text-align:left;">
+Stitch Fix
+</td>
+<td style="text-align:left;">
+Data Scientist - Freestyle Discovery
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,CS|Computer Science,ML|Machine Learning,Models|Modeling,Physics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+325
+</td>
+<td style="text-align:left;">
+Stitch Fix
+</td>
+<td style="text-align:left;">
+Data Scientist - Freestyle Recommendations
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,CS|Computer Science,ML|Machine Learning,Models|Modeling,Physics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+373
+</td>
+<td style="text-align:left;">
+Stitch Fix
+</td>
+<td style="text-align:left;">
+Data Scientist - Promotion Strategy
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,ML|Machine Learning
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+294
+</td>
+<td style="text-align:left;">
+Talkdesk
+</td>
+<td style="text-align:left;">
+Data Scientist (NLP)
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Decision Trees,NLP|Language Processing,ML|Machine Learning,Models|Modeling
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:left;">
+Tapestry
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Agile,AI|Artificial Intelligence,API|Application Programming Interface,AWS|Amazon Web Services,Azure,CS|Computer Science,Deep Learning,ML|Machine Learning,Models|Modeling,R,SQL,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+342
+</td>
+<td style="text-align:left;">
+Tata Consultancy Services
+</td>
+<td style="text-align:left;">
+Data Analyst
+</td>
+<td style="text-align:left;">
+$57,000/yr - $106,000/yr (LinkedIn est.)
+</td>
+<td style="text-align:left;">
+Database|Databases,Excel,Models|Modeling,PowerPoint
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+264
+</td>
+<td style="text-align:left;">
+Tempus Labs, Inc. 
+</td>
+<td style="text-align:left;">
+Senior Data Scientist, Data Health
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,ETL|Extact, Transform, and Load,Git|Github,ML|Machine Learning,Models|Modeling,SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+245
+</td>
+<td style="text-align:left;">
+Tesla
+</td>
+<td style="text-align:left;">
+Data Analyst, Distribution Center
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Data Mining,Database|Databases,ETL|Extact, Transform, and Load,Excel,JavaScript,Math|Mathematics,Models|Modeling,SAS,SQL,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+542
+</td>
+<td style="text-align:left;">
+TIDAL
+</td>
+<td style="text-align:left;">
+Data Analyst, Royalties
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Data Modeling,Database|Databases,ETL|Extact, Transform, and Load,Excel,Models|Modeling,SQL,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:left;">
+Two Sigma
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Data Analysis,Matlab,Models|Modeling,Pandas,R,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+204
+</td>
+<td style="text-align:left;">
+Two Sigma
+</td>
+<td style="text-align:left;">
+Data Scientist - Alpha Insights
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+CS|Computer Science,Data Analysis,Pandas,R,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+303
+</td>
+<td style="text-align:left;">
+Two Sigma
+</td>
+<td style="text-align:left;">
+Data Scientist - Strategic Data Science
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Data Analysis,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+400
+</td>
+<td style="text-align:left;">
+Two Sigma
+</td>
+<td style="text-align:left;">
+Data Scientist - Two Sigma Insurance Quantified
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,CS|Computer Science,Data Analysis,NLP|Language Processing,ML|Machine Learning,Models|Modeling,Numpy,Pandas,R,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+142
+</td>
+<td style="text-align:left;">
+Uber
+</td>
+<td style="text-align:left;">
+Data Scientist / Senior Data Scientist - Core Analytics &amp; Science
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Bioinformatics,CS|Computer Science,Data Visualization,Excel,ML|Machine Learning,Math|Mathematics,SQL,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+168
+</td>
+<td style="text-align:left;">
+Uber
+</td>
+<td style="text-align:left;">
+Data Scientist - Global Marketing
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Advanced Analytics,Bioinformatics,CS|Computer Science,Data Mining,Data Modeling,Data Visualization,Data Warehouse,ETL|Extact, Transform, and Load,Excel,Jupyter,ML|Machine Learning,Math|Mathematics,Models|Modeling,SQL,Statistics|Statistical,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+487
+</td>
+<td style="text-align:left;">
+UPS
+</td>
+<td style="text-align:left;">
+Senior Data Scientist - Multiple Locations
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Advanced Analytics,AI|Artificial Intelligence,AWS|Amazon Web Services,Azure,Bayesian,Biology,CS|Computer Science,ETL|Extact, Transform, and Load,NLP|Language Processing,ML|Machine Learning,Math|Mathematics,Models|Modeling,Physics,R,SQL,Statistics|Statistical,Time Series
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+758
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+759
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+760
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+761
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+762
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+763
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+764
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+765
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+766
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+767
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+769
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+770
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+772
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+773
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+774
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+775
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+796
+</td>
+<td style="text-align:left;">
+Varsity Tutors, a Nerdy Company
+</td>
+<td style="text-align:left;">
+Remote Data Analysis Tutor Jobs
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Data Analysis,Math|Mathematics
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+695
+</td>
+<td style="text-align:left;">
+Veeva Systems
+</td>
+<td style="text-align:left;">
+Data Analyst - Talent Analytics
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+API|Application Programming Interface,Data Visualization,Database|Databases,Excel,Tableau
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+669
+</td>
+<td style="text-align:left;">
+Verizon
+</td>
+<td style="text-align:left;">
+Principal Data Scientist - Ethical Artificial Intelligence Strategy
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Cloud Computing,CS|Computer Science,ML|Machine Learning,Math|Mathematics,Models|Modeling,Physics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+691
+</td>
+<td style="text-align:left;">
+Verizon
+</td>
+<td style="text-align:left;">
+Principal Data Scientist - Ethical Artificial Intelligence Strategy
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AI|Artificial Intelligence,Cloud Computing,CS|Computer Science,ML|Machine Learning,Math|Mathematics,Models|Modeling,Physics,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+528
+</td>
+<td style="text-align:left;">
+WarnerMedia
+</td>
+<td style="text-align:left;">
+Staff Data Scientist, Advertising - HBO Max
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AWS|Amazon Web Services,CS|Computer Science,Database|Databases,ETL|Extact, Transform, and Load,ML|Machine Learning,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+539
+</td>
+<td style="text-align:left;">
+WarnerMedia
+</td>
+<td style="text-align:left;">
+Sr. Data Scientist, Retention &amp; Engagement
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+AWS|Amazon Web Services,CS|Computer Science,Database|Databases,ETL|Extact, Transform, and Load,ML|Machine Learning,Models|Modeling,Statistics|Statistical
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:left;">
+Weber Shandwick
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+API|Application Programming Interface,Data Analysis,ETL|Extact, Transform, and Load,NLP|Language Processing,ML|Machine Learning,Models|Modeling
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+51
+</td>
+<td style="text-align:left;">
+Yotta
+</td>
+<td style="text-align:left;">
+Data Scientist
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+SQL
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+561
+</td>
+<td style="text-align:left;">
+Zillow
+</td>
+<td style="text-align:left;">
+Data Scientist II, Premier Agent
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+Data Analysis,Excel,Math|Mathematics,R,SQL,Statistics|Statistical,Tableau
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Roughly <code>28%</code> of the jobs do not require Python but looking at the job titles I noticed that many of the jobs were not exactly data related. For example I noticed postings for <code>C# Software Developer</code> which understandably would likely not require Python as a skill.</p>
+<p>Filtering down the list to jobs that contain <code>Data</code> in the job title I found that only <code>18%</code> of those jobs do not require Python.</p>
 </div>
 <div id="teardown" class="section level2">
 <h2>Teardown</h2>
 <div id="close-db-connection" class="section level3">
 <h3>Close DB Connection</h3>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code></pre></div>
 </div>
 </div>
 </div>
