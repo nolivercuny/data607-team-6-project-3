@@ -1,0 +1,114 @@
+---
+title: "Project 3"
+author: "Donald Butler"
+output:
+  prettydoc::html_pretty:
+    theme: hpstr
+    highlight: github
+editor_options: 
+  chunk_output_type: console
+---
+
+# Project 3 Analysis
+
+## Setup
+
+### Load Libraries
+
+```{r results=FALSE, message=FALSE, warning=FALSE}
+library(DBI)
+library(tidyverse)
+library(ggplot2)
+library(kableExtra)
+```
+
+### Open DB connection
+
+```{r}
+dbLocation <-"../data/project3_job_skills.db"
+print(dbLocation)
+con <- dbConnect(RSQLite::SQLite(), dbname = dbLocation)
+```
+
+### Load DB Tables
+
+```{r}
+tables <- dbListTables(con)
+company_df <- dbReadTable(con, 'company')
+listing_df <- dbReadTable(con, 'job_listing')
+skills_df <- dbReadTable(con, 'job_listing_skill')
+```
+
+### Join Data
+
+```{r}
+job_listings <- listing_df %>%
+  inner_join(company_df, by = c('company_id' = 'id'))
+
+job_listings_skills <- job_listings %>%
+  inner_join(skills_df, by = c('id' = 'job_listing_id'))
+```
+
+## List Frequencies
+
+### Skills Required
+
+```{r}
+job_listings_skills %>%
+  group_by(skill) %>%
+  summarize(count = n()) %>%
+  filter(count >= 25) %>%
+  ggplot(aes(x = reorder(skill,count), y = count)) + geom_bar(stat = 'identity') + coord_flip()
+```
+
+### Job Title
+
+```{r}
+job_listings %>%
+  group_by(job_title) %>%
+  summarize(count = n()) %>%
+  filter(count >= 3) %>%
+  ggplot(aes(x = reorder(job_title,count), y = count)) + geom_bar(stat = 'identity') + coord_flip()
+```
+
+### Companies with Data Science Jobs
+
+```{r}
+job_listings %>%
+  group_by(company_name) %>%
+  summarize(count = n()) %>%
+  filter(count >= 5) %>%
+  ggplot(aes(x = reorder(company_name,count), y = count)) + geom_bar(stat = 'identity') + coord_flip()
+```
+
+### Amazon Job Requirements
+
+```{r}
+job_listings_skills %>%
+  filter(grepl('amazon',company_name,ignore.case = TRUE)) %>%
+  group_by(skill) %>%
+  summarize(count = n()) %>%
+  ggplot(aes(x = reorder(skill,count), y = count)) + geom_bar(stat = 'identity') + coord_flip()
+```
+
+### Facebook Job Requirements
+
+```{r}
+job_listings_skills %>%
+  filter(grepl('facebook',company_name,ignore.case = TRUE)) %>%
+  group_by(skill) %>%
+  summarize(count = n()) %>%
+  ggplot(aes(x = reorder(skill,count), y = count)) + geom_bar(stat = 'identity') + coord_flip()
+```
+
+### Skills needed for Data Scientist or Data Analyst job titles
+
+```{r}
+job_listings_skills %>%
+  filter(grepl('data scientist|data analyst',job_title,ignore.case = TRUE)) %>%
+  group_by(skill) %>%
+  summarize(count = n()) %>%
+  filter(count >= 10) %>%
+  ggplot(aes(x = reorder(skill,count), y = count)) + geom_bar(stat = 'identity') + coord_flip()
+```
+

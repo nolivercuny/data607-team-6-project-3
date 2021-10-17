@@ -1,0 +1,65 @@
+---
+title: "CUNY 607 - Project 3"
+author: "Team 6 Presentation"
+date: "October 17, 2021"
+#output: ioslides_presentation
+output:
+  prettydoc::html_pretty:
+    theme: hpstr
+    highlight: github
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+### Team Members
+
+- Donald Butler
+- Nick Oliver
+- Jeffrey Parks
+- Mark Schamfield
+
+### Project Objective
+
+Use data to answer the question, “Which are the most valued data science skills?”
+
+- Identify viable data sources.
+- Load data into a relational database with normalized tables.
+- Perform tidying, transformaiton and exploratory data analytis in R.
+- Analyze data and show findings.
+
+### Project Approach
+
+We considered potential data sources for this project, including:
+
+- Scraping "Data Scientist" job postings from websites like Indeed and LinkedIn.
+- Examine Reddit.com data science related subreddits for questions related to "skills" or "careers"
+- Look at python packages or npm packages or r packages that mention specific skills
+- Examine Youtube videos that mention learning some data science skill
+- Interview question/interview study guides that are targeted at data scientists
+- LinkedIn public profiles of employed data scientists and what skills they list
+- Analyze StackOverflow data science related pages
+
+After initial discussion, we decided to attempt the first option, scraping 'Data Scientist' job listings. 
+
+Our initial idea was to leverage an API endpoint from one of the popular services, such as Indeed.com.  However, we found that while Indeed does produce an API, it restricts access to verified Publishers of job postings.  In the interest of time, and since we had some team members with experience in web scraping, we explored pulling job listings directly from the from LinkedIn website using a popular browser automation tool, **Selenium** using Python.
+
+Once we had the data in hand, we identified a multi-step approach to analysis:
+
+- Use a text mining package such **tidytext** to tokenize keywords in the job descriptions
+- Scan the tokenized keywords for terms describing discrete job skills, and filter out non-skill-related terms.
+- Built a relational database with individual tables for Job Listings, Companies and Skills
+- Query the database to analyze the counts, frequency and trends.
+
+### Data Acquisition
+
+### Data Transformation and Loading
+
+### Exploratory Data Analysis
+
+### Conclusions
+
+
