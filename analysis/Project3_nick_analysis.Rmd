@@ -33,6 +33,11 @@ con <- dbConnect(RSQLite::SQLite(), dbname = dbLocation)
 
 ## Which companies require the most skills?
 
+- Select job listings grouped by company and count the number of skills required. 
+- Then select number of job listings by company. 
+- Join the two dataframes and add a column which is the mean number of skills required by taking the total number of required skills divided by the total number of listings
+- Then arrage by higest number of skills required, select to 10, and put in a table.
+
 ```{r}
 companySkillsCountDf <- dbGetQuery(con, "select c.company_name, count(jls.skill) as required_skills
 from job_listing jl
@@ -57,23 +62,52 @@ joinedDf %>%
   select(company_name, mean_skills_per_listing) %>% 
   arrange(desc(mean_skills_per_listing)) %>%
   top_n(10, mean_skills_per_listing) %>%
-  kable(caption = "Companies Requiring Most Skills", format = "html") %>% 
+  kable(caption = "Companies Requiring Most Skills", format = "html", col.names = c("Company Name", "Mean Number Skills Required")) %>% 
   kable_styling("striped", "hover") %>% 
   scroll_box(width = "100%")
 ```
 
 ### Which companies require fewest skills?
 
+- Take the same dataframe as above except arrange in reverse order and take the bottom 10 companies
+
 ```{r}
 joinedDf %>% 
   select(company_name, mean_skills_per_listing) %>% 
   arrange(mean_skills_per_listing) %>%
   top_n(-10,mean_skills_per_listing) %>%
-  kable(caption = "Companies Requiring Most Skills", format = "html") %>% 
+  kable(caption = "Companies Requiring Fewest Skills", format = "html", col.names = c("Company Name", "Mean Number Skills Required")) %>% 
   kable_styling("striped", "hover") %>% 
   scroll_box(width = "100%")
 ```
 
+
+## What Companies Do Not Require The Most Popular Skill?
+
+```{r}
+topSkillDf <- dbGetQuery(con,"select count(1), skill
+from job_listing_skill
+group by skill
+order by count(1) desc
+limit 1;")
+
+print(topSkillDf$skill)
+
+allListingsDf <- dbGetQuery(con, "select jl.id, jl.job_title, c.company_name, jls.skill, jl.salary
+from job_listing jl
+join company c on c.id = jl.company_id
+join job_listing_skill jls on jl.id = jls.job_listing_id;")
+
+groupedSkillsDf <- allListingsDf %>% group_by(id, company_name, job_title, salary) %>% summarise(skills = paste(skill, collapse = ","))
+
+
+noPythonJobsDf <- groupedSkillsDf %>% filter(!grepl("Python", skills))
+
+print(scales::percent(nrow(noPythonJobsDf) / nrow(groupedSkillsDf)))
+
+```
+
+**Roughly 28% of the jobs do not require python.**
 
 ## Teardown
 
