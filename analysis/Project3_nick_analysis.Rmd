@@ -1,0 +1,87 @@
+---
+title: "Project 3"
+author: "Nick Oliver"
+output:
+  prettydoc::html_pretty:
+    theme: hpstr
+    highlight: github
+editor_options: 
+  chunk_output_type: console
+---
+
+# Project 3 Analysis
+
+## Setup
+
+### Load Libraries
+
+
+```{r results=FALSE, message=FALSE, warning=FALSE}
+library(DBI)
+library(tidyverse)
+library(ggplot2)
+library(kableExtra)
+```
+
+### Open DB connection
+
+```{r}
+dbLocation <-"/Users/t0pth4t/Downloads/CUNY/DATA607/data607-team-6-project-3/data/project3_job_skills.db"
+print(dbLocation)
+con <- dbConnect(RSQLite::SQLite(), dbname = dbLocation)
+```
+
+## Which companies require the most skills?
+
+```{r}
+companySkillsCountDf <- dbGetQuery(con, "select c.company_name, count(jls.skill) as required_skills
+from job_listing jl
+join job_listing_skill jls on jl.id = jls.job_listing_id
+join company c on c.id = jl.company_id
+group by company_name
+order by required_skills desc;
+")
+
+companyJobListingsCountDf <- dbGetQuery(con, "
+select c.company_name, count(jl.id) as number_job_listings
+from job_listing jl
+join company c on c.id = jl.company_id
+group by company_name
+order by number_job_listings desc; ")
+
+joinedDf <- left_join(companyJobListingsCountDf, companySkillsCountDf, by="company_name") %>%
+  mutate(mean_skills_per_listing = round(required_skills / number_job_listings))
+
+
+joinedDf %>% 
+  select(company_name, mean_skills_per_listing) %>% 
+  arrange(desc(mean_skills_per_listing)) %>%
+  top_n(10, mean_skills_per_listing) %>%
+  kable(caption = "Companies Requiring Most Skills", format = "html") %>% 
+  kable_styling("striped", "hover") %>% 
+  scroll_box(width = "100%")
+```
+
+### Which companies require fewest skills?
+
+```{r}
+joinedDf %>% 
+  select(company_name, mean_skills_per_listing) %>% 
+  arrange(mean_skills_per_listing) %>%
+  top_n(-10,mean_skills_per_listing) %>%
+  kable(caption = "Companies Requiring Most Skills", format = "html") %>% 
+  kable_styling("striped", "hover") %>% 
+  scroll_box(width = "100%")
+```
+
+
+## Teardown
+
+### Close DB Connection
+
+```{r}
+dbDisconnect(con)
+```
+
+
+
