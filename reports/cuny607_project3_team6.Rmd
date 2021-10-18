@@ -2,15 +2,15 @@
 title: "CUNY 607 - Project 3"
 author: "Team 6 Presentation"
 date: "October 17, 2021"
-always_allow_html: true
 
 output:
-#  ioslides_presentation
-   pdf_document:
-     df_print: kable
-     highlight: zenburn
-     toc: true
-     number_sections: true
+  rmdformats::robobook:
+    highlight: kate
+#  pdf_document:
+#     df_print: kable
+#     highlight: zenburn
+#     toc: true
+#     number_sections: true
 #  prettydoc::html_pretty:
 #    theme: hpstr
 #    highlight: github
@@ -53,7 +53,7 @@ Use data to answer the question, “Which are the most valued data science skill
 
 ## Project Approach
 
-We considered potential data sources for this project, including:
+We considered several potential data sources for this project, including:
 
 - Scraping "Data Scientist" job postings from websites like Indeed and LinkedIn.
 - Examine Reddit data science-related subreddits for questions related to "skills" or "careers"
@@ -87,11 +87,17 @@ Results were scraped from an automated browser session managed by the **Selenium
 
 The first session navigated to the LinkedIn search results, collected the job listing titles and dedicated URLs from the results page, and then automatically paginated to the next page of results and repeated the collection until all search results (approximately 1000) were captured.  These results were written to a .csv file, which became the input for the second session.   This session took approximately 8-10 minutes to complete.
 
-The second session loaded the .csv file with the dedicated URLs for each search result, and looping through these results collected information from each page.  This session resulted in 838 complete profiles and took several hours to complete, exempting search results that were deemed invalid (such as "no longer accepting applications" or other flags.)  
+The second session loaded the .csv file with the dedicated URLs for each search result, and looping through these results collected information from each page.  This session resulted in almost 850 complete profiles and took several hours to complete, exempting search results that were deemed invalid (such as "no longer accepting applications" or other flags.)  
 
-Results were saved as a .csv file, **job_listings_final.csv**.
+Results were saved as **job_listings_final.csv**.
 
 The Jupyter Notebook, Selenium API script and supporting data can be found in: https://github.com/nolivercuny/data607-team-6-project-3/tree/master/data/jobs-scraper
+
+```{r, eval=TRUE, echo=FALSE}
+knitr::include_graphics("https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/reports/img/selenium_init.png")
+knitr::include_graphics("https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/reports/img/selenium_getjoblist.png")
+knitr::include_graphics("https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/reports/img/seleniun_getdetails.png")
+```
 
 \clearpage
 # Data Transformation 
@@ -334,7 +340,7 @@ dbDisconnect(con)
 
 <!-- Presenter: ? -->
 
-## Load from database / create fact tables
+### Load from Database
 ```{r eval=TRUE}
 # replace with relative or remote path to db
 dbLocation <-"/Users/jeff/Development/data607-team-6-project-3/data/project3_job_skills.db"
@@ -371,7 +377,7 @@ words_df %>%
 
 ### Soft Skills
 
-This wordcloud graph of all terms effectively highlights both technical and "soft skill"terms with high frequencies. If we apply a manual filter for some of the common "soft skills" in our dataset, we get a clearer picture of what employers are looking for in this category from Data Scientists:
+The previous wordcloud effectively highlights both technical and "soft skill"terms with high frequencies. If we apply a manual filter for some of the common "soft skills" in our dataset, we get a clearer picture of what employers are looking for in this category from Data Scientists:
 
 ```{r, eval=TRUE}
 soft_skills<-c("business","team","build","people","research","insights","gender","support","communication","equal","customers","complex","management","services","impact","projects","global","create","learn","strategy","driven","improve","committed","future","decision","leadership","responsible")
@@ -388,8 +394,7 @@ words_df %>%
 
 #### Technical Skills for Data Scientist or Data Analyst in New York, NY
 
-
-Our analysis of technical skill frequency suggests that candidates are expected to be versed in Python, R and SQL as foundational skills.
+Looking strictly at "hard skills", uur analysis frequency suggests that candidates should be "tri-lingual" in Python, R and SQL as foundation skills.
 
 ```{r, eval=TRUE}
 job_listings_skills %>%
@@ -417,7 +422,7 @@ job_listings %>%
 
 ### Companies requiring the most skills
 
-Certain companies were very detailed in their postings, with high average frequency of technical skills outlined in their job description.
+Certain companies were very detailed in their postings, with high average frequency of technical skills outlined in their job descriptions.
 
 ```{r, eval=TRUE}
 companySkillsCountDf <- dbGetQuery(con, 
