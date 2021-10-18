@@ -19,6 +19,99 @@
 <script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+/* A workaround for https://github.com/jgm/pandoc/issues/4278 */
+a.sourceLine {
+  pointer-events: auto;
+}
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -52,6 +145,7 @@
 
 <div class="entry-content">
 
+<!-- Presenter: ?? -->
 <div id="team-members" class="section level3">
 <h3>Team Members</h3>
 <ul>
@@ -60,6 +154,7 @@
 <li>Jeffrey Parks</li>
 <li>Mark Schamfield</li>
 </ul>
+<hr />
 </div>
 <div id="project-objective" class="section level3">
 <h3>Project Objective</h3>
@@ -70,40 +165,357 @@
 <li>Perform tidying, transformaiton and exploratory data analytis in R.</li>
 <li>Analyze data and show findings.</li>
 </ul>
+<hr />
 </div>
 <div id="project-approach" class="section level3">
 <h3>Project Approach</h3>
 <p>We considered potential data sources for this project, including:</p>
 <ul>
 <li>Scraping “Data Scientist” job postings from websites like Indeed and LinkedIn.</li>
-<li>Examine Reddit.com data science related subreddits for questions related to “skills” or “careers”</li>
-<li>Look at python packages or npm packages or r packages that mention specific skills</li>
-<li>Examine Youtube videos that mention learning some data science skill</li>
-<li>Interview question/interview study guides that are targeted at data scientists</li>
-<li>LinkedIn public profiles of employed data scientists and what skills they list</li>
-<li>Analyze StackOverflow data science related pages</li>
+<li>Examine Reddit data science-related subreddits for questions related to “skills” or “careers”</li>
+<li>Looking at Python, NPM or R packages that mention specific skills</li>
+<li>Reviewing Youtube videos that mention learning some data science skill</li>
+<li>Interviewing question/interview study guides that are targeted at data scientists</li>
+<li>Finding LinkedIn public profiles of employed data scientists and what skills they list</li>
+<li>Analyzing StackOverflow data science-related pages</li>
 </ul>
 <p>After initial discussion, we decided to attempt the first option, scraping ‘Data Scientist’ job listings.</p>
-<p>Our initial idea was to leverage an API endpoint from one of the popular services, such as Indeed.com. However, we found that while Indeed does produce an API, it restricts access to verified Publishers of job postings. In the interest of time, and since we had some team members with experience in web scraping, we explored pulling job listings directly from the from LinkedIn website using a popular browser automation tool, <strong>Selenium</strong> using Python.</p>
+<p>Our initial idea was to leverage an API endpoint from one of the popular services, such as Indeed.com. However, we found that while Indeed does produce an API, it restricts access to verified Publishers of job postings. In the interests of time, and since we had some team members with experience in web scraping, we pulled job listings directly from the from LinkedIn website using a popular browser automation tool, <strong>Selenium</strong> using Python.</p>
 <p>Once we had the data in hand, we identified a multi-step approach to analysis:</p>
 <ul>
 <li>Use a text mining package such <strong>tidytext</strong> to tokenize keywords in the job descriptions</li>
-<li>Scan the tokenized keywords for terms describing discrete job skills, and filter out non-skill-related terms.</li>
+<li>Manually scan the tokenized keywords for terms describing discrete job skills, and filter out non-skill-related terms.</li>
 <li>Built a relational database with individual tables for Job Listings, Companies and Skills</li>
 <li>Query the database to analyze the counts, frequency and trends.</li>
 </ul>
+<hr />
 </div>
 <div id="data-acquisition" class="section level3">
 <h3>Data Acquisition</h3>
+<!-- Presenter: Jeff -->
+<p>wfoerfgoewrhiugwergoh</p>
+<hr />
 </div>
-<div id="data-transformation-and-loading" class="section level3">
-<h3>Data Transformation and Loading</h3>
+<div id="data-transformation" class="section level3">
+<h3>Data Transformation</h3>
+<p>Our first step was to transform the raw job descriptions into tokenized fields for analysis. We decided to create one table with all words (except for “stop words”) to analyze overall frequency at a high level, and a second table that would identify common multi-word combinations called “ngrams.”</p>
+<p>This second approach would correctly return the frequency of phrases such as “Machine Learning”, instead of separate results for “Machine” and “Learning”. We further filtered this second table manually to identify actual job skills, and not extraneous information (such as company names and other filler text.)</p>
+<ol style="list-style-type: decimal">
+<li>Load the job descriptions dataset</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>urlfile<span class="ot">&lt;-</span><span class="st">&quot;https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/data/job_listings_final.csv&quot;</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>jobdat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">url</span>(urlfile))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>jobdat<span class="ot">&lt;-</span><span class="fu">data_frame</span>(jobdat)</span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>Create <strong>jobdata_words.csv</strong> file from dataset for analyis of overall term frequency. Used <strong>tidytext</strong> to un-nest the job descriptions into indivdual words, removing “stop words” (the, of, to, etc)</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>jobdat_word<span class="ot">&lt;-</span> <span class="fu">unnest_tokens</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  jobdat,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  word,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  description,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">token=</span> <span class="st">&quot;words&quot;</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">format=</span><span class="fu">c</span>(<span class="st">&quot;text&quot;</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">to_lower=</span><span class="cn">TRUE</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">drop=</span><span class="cn">TRUE</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">collapse=</span><span class="cn">NULL</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>jobdat_word <span class="ot">&lt;-</span>jobdat_word <span class="sc">%&gt;%</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anti_join</span>(stop_words)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(jobdat_word,<span class="st">&#39;data/jobdata_words.csv&#39;</span>)</span></code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li>Create <strong>jobdat_ngrams.csv</strong> file from raw dataset for analysis of tokenized terms/phrases that meet criteria for “skills.” Using <strong>tidytext</strong>, created ngrams of 1, 2, and 3 words, filtered out the common stop_words, and then did a count of each and filtered down to the rows that occurred at least 10 times within the raw dataset. The resulting 6015 rows were exported to a f.csv ile which I loaded into Excel to manually determine which terms described actual job skills and which did not.</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>jobdat_1gram <span class="ot">&lt;-</span> jobdat <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(ngram,description,<span class="at">token=</span><span class="st">&#39;ngrams&#39;</span>,<span class="at">n=</span><span class="dv">1</span>,<span class="at">format=</span><span class="st">&#39;text&#39;</span>,<span class="at">drop=</span><span class="cn">TRUE</span>,<span class="at">to_lower=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>ngram <span class="sc">%in%</span> stop_words<span class="sc">$</span>word) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ngram,<span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;=</span> <span class="dv">10</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>jobdat_2gram <span class="ot">&lt;-</span> jobdat <span class="sc">%&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(ngram,description,<span class="at">token=</span><span class="st">&#39;ngrams&#39;</span>,<span class="at">n=</span><span class="dv">2</span>,<span class="at">format=</span><span class="st">&#39;text&#39;</span>,<span class="at">drop=</span><span class="cn">TRUE</span>,<span class="at">to_lower=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(ngram,<span class="fu">c</span>(<span class="st">&#39;word1&#39;</span>,<span class="st">&#39;word2&#39;</span>),<span class="at">sep =</span> <span class="st">&quot; &quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>word1 <span class="sc">%in%</span> stop_words<span class="sc">$</span>word) <span class="sc">%&gt;%</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>word2 <span class="sc">%in%</span> stop_words<span class="sc">$</span>word) <span class="sc">%&gt;%</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(ngram, <span class="fu">c</span>(<span class="st">&#39;word1&#39;</span>,<span class="st">&#39;word2&#39;</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ngram,<span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;=</span> <span class="dv">10</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>jobdat_3gram <span class="ot">&lt;-</span> jobdat <span class="sc">%&gt;%</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(ngram,description,<span class="at">token=</span><span class="st">&#39;ngrams&#39;</span>,<span class="at">n=</span><span class="dv">3</span>,<span class="at">format=</span><span class="st">&#39;text&#39;</span>,<span class="at">drop=</span><span class="cn">TRUE</span>,<span class="at">to_lower=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(ngram,<span class="fu">c</span>(<span class="st">&#39;word1&#39;</span>,<span class="st">&#39;word2&#39;</span>,<span class="st">&#39;word3&#39;</span>),<span class="at">sep =</span> <span class="st">&quot; &quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>word1 <span class="sc">%in%</span> stop_words<span class="sc">$</span>word) <span class="sc">%&gt;%</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>word2 <span class="sc">%in%</span> stop_words<span class="sc">$</span>word) <span class="sc">%&gt;%</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>word3 <span class="sc">%in%</span> stop_words<span class="sc">$</span>word) <span class="sc">%&gt;%</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(ngram, <span class="fu">c</span>(<span class="st">&#39;word1&#39;</span>,<span class="st">&#39;word2&#39;</span>,<span class="st">&#39;word3&#39;</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ngram,<span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;=</span> <span class="dv">10</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>jobdat_ngrams <span class="ot">&lt;-</span> jobdat_1gram <span class="sc">%&gt;%</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbind</span>(jobdat_2gram) <span class="sc">%&gt;%</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbind</span>(jobdat_3gram) <span class="sc">%&gt;%</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>jobdat_ngrams <span class="sc">%&gt;%</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write.table</span>(<span class="at">file =</span> <span class="st">&#39;./jobdat_ngrams.csv&#39;</span>,<span class="at">quote =</span> <span class="cn">FALSE</span>, <span class="at">sep =</span> <span class="st">&#39;</span><span class="sc">\t</span><span class="st">&#39;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 </div>
+<div id="loading-into-database" class="section level2">
+<h2>Loading into Database</h2>
+<!-- Presenter: Nick -->
+<p>To support the data analysis, we transformed the raw dataset into a relational database using <strong>Sqlite</strong>, a file-based format that is both fast and portable, so that all team members could access the database without having to manage any kind of server.</p>
+<ol style="list-style-type: decimal">
+<li>Create Database</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For testing - use in-memory DB</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="at">dbname =</span> <span class="st">&quot;:memory:&quot;</span>) </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment to manipulate real DB</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#con &lt;- dbConnect(RSQLite::SQLite(), dbname = &quot;project3_job_skills.db&quot;) </span></span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>Create Tables</li>
+</ol>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>baseUrl <span class="ot">&lt;-</span> <span class="st">&quot;https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/sql/&quot;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>tables <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;company&quot;</span>, <span class="st">&quot;job_listing&quot;</span>, <span class="st">&quot;job_listing_skill&quot;</span>,<span class="st">&quot;job_listing_word&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (table <span class="cf">in</span> tables) {</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  fileUrl <span class="ot">&lt;-</span> <span class="fu">paste</span>(baseUrl, table,<span class="st">&quot;.sql&quot;</span>,<span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  createTableStatement <span class="ot">&lt;-</span> <span class="fu">getURL</span>(fileUrl)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Creating &quot;</span>, table, <span class="st">&quot; table&quot;</span>))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbSendQuery</span>(con, createTableStatement)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li>Load Data From CSV</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>urlfile<span class="ot">&lt;-</span><span class="st">&quot;https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/data/job_listings_final.csv&quot;</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>jobdat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">url</span>(urlfile))</span></code></pre></div>
+<ol start="4" style="list-style-type: decimal">
+<li>Populate <strong>company</strong> table: unique row per company (420)</li>
+</ol>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>companiesDf <span class="ot">&lt;-</span> jobdat <span class="sc">%&gt;%</span> <span class="fu">select</span>(company_name, company_size, industry) <span class="sc">%&gt;%</span> <span class="fu">distinct</span>() </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>companiesDf<span class="sc">$</span>company_name <span class="ot">&lt;-</span> companiesDf<span class="sc">$</span>company_name <span class="sc">%&gt;%</span> <span class="fu">replace_na</span>(<span class="st">&quot;unknown&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(con,<span class="st">&quot;company&quot;</span>,companiesDf, <span class="at">append=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th><code>column_name</code></th>
+<th><code>data_type</code></th>
+<th><code>attrs</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>id</code></td>
+<td><code>int</code></td>
+<td><code>pk</code></td>
+</tr>
+<tr class="even">
+<td><code>company_name</code></td>
+<td><code>int</code></td>
+<td><code>not null</code></td>
+</tr>
+<tr class="odd">
+<td><code>company_size</code></td>
+<td><code>int</code></td>
+<td><code>null</code></td>
+</tr>
+<tr class="even">
+<td><code>industry</code></td>
+<td><code>int</code></td>
+<td><code>null</code></td>
+</tr>
+</tbody>
+</table>
+<ol start="5" style="list-style-type: decimal">
+<li>Populate <strong>job_listing</strong> table: unique row per job listing (849)</li>
+</ol>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove columns that are in the company table</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>jobListingDf <span class="ot">&lt;-</span> jobdat <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;company_size&quot;</span>, <span class="st">&quot;industry&quot;</span>))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix the one company name that is NA</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>jobListingDf<span class="sc">$</span>company_name <span class="ot">&lt;-</span> jobListingDf<span class="sc">$</span>company_name <span class="sc">%&gt;%</span> <span class="fu">replace_na</span>(<span class="st">&quot;unknown&quot;</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Read companies to get company ID for joining</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>companiesWithId <span class="ot">&lt;-</span> <span class="fu">dbReadTable</span>(con,<span class="st">&quot;company&quot;</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Join job listing with company to populate id, then drop company-specific cols</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># rename id column to company id</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>joined <span class="ot">&lt;-</span> <span class="fu">left_join</span>(jobListingDf, companiesWithId, <span class="at">by=</span><span class="st">&quot;company_name&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;company_size&quot;</span>, <span class="st">&quot;industry&quot;</span>,<span class="st">&quot;company_name&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">company_id =</span> id)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#write dataframe to job_listing table</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(con, <span class="st">&quot;job_listing&quot;</span>, joined, <span class="at">append=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th><code>column_name</code></th>
+<th><code>data_type</code></th>
+<th><code>attrs</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>id</code></td>
+<td><code>int</code></td>
+<td><code>pk</code></td>
+</tr>
+<tr class="even">
+<td><code>search_rank</code></td>
+<td><code>int</code></td>
+<td><code>not null</code></td>
+</tr>
+<tr class="odd">
+<td><code>job_title</code></td>
+<td><code>text</code></td>
+<td><code>not null</code></td>
+</tr>
+<tr class="even">
+<td><code>region</code></td>
+<td><code>text</code></td>
+<td><code>not null</code></td>
+</tr>
+<tr class="odd">
+<td><code>applicant_count</code></td>
+<td><code>int</code></td>
+<td><code>null</code></td>
+</tr>
+<tr class="even">
+<td><code>salary</code></td>
+<td><code>text</code></td>
+<td><code>null</code></td>
+</tr>
+<tr class="odd">
+<td><code>employment_type</code></td>
+<td><code>text</code></td>
+<td><code>not null</code></td>
+</tr>
+<tr class="even">
+<td><code>career_level</code></td>
+<td><code>text</code></td>
+<td><code>null</code></td>
+</tr>
+<tr class="odd">
+<td><code>description</code></td>
+<td><code>text</code></td>
+<td><code>null</code></td>
+</tr>
+<tr class="even">
+<td><code>date_queried</code></td>
+<td><code>text</code></td>
+<td><code>null</code></td>
+</tr>
+<tr class="odd">
+<td><code>date_posted</code></td>
+<td><code>text</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>company_id</code></td>
+<td><code>int</code></td>
+<td><code>fk</code></td>
+</tr>
+</tbody>
+</table>
+<ol start="6" style="list-style-type: decimal">
+<li>Populate <strong>job_listing_word</strong> table: unique row per word (18,000)</li>
+</ol>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>wordsDataUrl <span class="ot">&lt;-</span> <span class="st">&quot;https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/data/jobdata_words.csv&quot;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>wordsJobListingData <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">url</span>(wordsDataUrl))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>wordsJobListingData<span class="ot">&lt;-</span><span class="fu">data_frame</span>(wordsJobListingData)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>wordsDf <span class="ot">&lt;-</span> wordsJobListingData <span class="sc">%&gt;%</span> <span class="fu">select</span>(search_rank, word)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>jobListingWithId <span class="ot">&lt;-</span> <span class="fu">dbReadTable</span>(con,<span class="st">&quot;job_listing&quot;</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>joinedWords<span class="ot">&lt;-</span><span class="fu">left_join</span>(wordsDf, jobListingWithId, <span class="at">by=</span><span class="st">&quot;search_rank&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, word) <span class="sc">%&gt;%</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">job_listing_id =</span> id, <span class="at">skill =</span> word)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(con,<span class="st">&quot;job_listing_word&quot;</span>, joinedWords, <span class="at">append=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th><code>column_name</code></th>
+<th><code>data_type</code></th>
+<th><code>attrs</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>id</code></td>
+<td><code>int</code></td>
+<td><code>pk</code></td>
+</tr>
+<tr class="even">
+<td><code>skill</code></td>
+<td><code>text</code></td>
+<td><code>not null</code></td>
+</tr>
+</tbody>
+</table>
+<ol start="7" style="list-style-type: decimal">
+<li>Populate <strong>job_listing_skill</strong> table: unique row per tokenized skill (53)</li>
+</ol>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>skillsDataUrl <span class="ot">&lt;-</span> <span class="st">&quot;https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/JobSkills.csv&quot;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>skillsData <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">url</span>(skillsDataUrl))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>skillsDf <span class="ot">&lt;-</span><span class="fu">data_frame</span>(skillsData)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>jobListingWithId <span class="ot">&lt;-</span> <span class="fu">dbReadTable</span>(con,<span class="st">&quot;job_listing&quot;</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>skillsTableDf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">job_listing_id=</span><span class="fu">integer</span>(), <span class="at">skill=</span><span class="fu">character</span>())</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(jobListingWithId)) {</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  listing <span class="ot">&lt;-</span> jobListingWithId[i,]</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(skillsDf)) {</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    skill <span class="ot">&lt;-</span> skillsDf[j,]</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    detected <span class="ot">&lt;-</span> <span class="fu">str_detect</span>(listing<span class="sc">$</span>description, <span class="fu">regex</span>(<span class="fu">paste</span>(<span class="st">&#39;[^A-Z0-9]&#39;</span>,skill,<span class="st">&#39;[^A-Z0-9]&#39;</span>,<span class="at">sep =</span> <span class="st">&#39;&#39;</span>),<span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(detected<span class="sc">==</span><span class="cn">TRUE</span>){</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>      skillsTableDf <span class="ot">&lt;-</span> skillsTableDf <span class="sc">%&gt;%</span> <span class="fu">add_row</span>(<span class="at">job_listing_id =</span> listing<span class="sc">$</span>id, <span class="at">skill =</span> skill<span class="sc">$</span>JobSkill)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(con,<span class="st">&quot;job_listing_skill&quot;</span>, skillsTableDf, <span class="at">append=</span><span class="cn">TRUE</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th><code>column_name</code></th>
+<th><code>data_type</code></th>
+<th><code>attrs</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>id</code></td>
+<td><code>int</code></td>
+<td><code>pk</code></td>
+</tr>
+<tr class="even">
+<td><code>job_listing_id</code></td>
+<td><code>int</code></td>
+<td><code>fk</code></td>
+</tr>
+<tr class="odd">
+<td><code>skill</code></td>
+<td><code>text</code></td>
+<td><code>not null</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
 <div id="exploratory-data-analysis" class="section level3">
 <h3>Exploratory Data Analysis</h3>
+<!-- Presenter: ? -->
+<p>For our initial EDA, we wanted to look at the raw frequency of terms among all 849 job listings, and identify some of the most commonly-used words.</p>
+<hr />
 </div>
-<div id="conclusions" class="section level2">
-<h2>Conclusions</h2>
+<div id="conclusions" class="section level3">
+<h3>Conclusions</h3>
+<!-- Presenter: ?? -->
+<ul>
+<li>Split between soft skills vs hard skills?</li>
+<li>Different types of skills per company / industry</li>
+<li>Companies like Amazon – using a general template?</li>
+<li>Importance of ‘trulingual’ Pyhton and R, SQL</li>
+<li>Plus general Stats, Math</li>
+</ul>
+</div>
 </div>
 </div><!-- /.entry-content -->
 </article>

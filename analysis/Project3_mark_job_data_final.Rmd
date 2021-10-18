@@ -51,6 +51,12 @@ glimpse(jobdat_word)
 
 ```
 
+Output to file
+
+```{r, eval=FALSE}
+write_csv(jobdat_word,'data/jobdata_words.csv')
+```
+
 Look at word count in the datafile for most common words
 
 ```{r word count}
