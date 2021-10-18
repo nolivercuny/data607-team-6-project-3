@@ -2,10 +2,15 @@
 title: "CUNY 607 - Project 3"
 author: "Team 6 Presentation"
 date: "October 17, 2021"
+always_allow_html: true
 
 output:
 #  ioslides_presentation
-   pdf_document
+   pdf_document:
+     df_print: kable
+     highlight: zenburn
+     toc: true
+     number_sections: true
 #  prettydoc::html_pretty:
 #    theme: hpstr
 #    highlight: github
@@ -17,24 +22,27 @@ output:
 knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
 
 library(DBI) # Database Interaction
+library(knitr)
 library(RCurl) # Pulling data from GH
 library(stringr)
 library(tidytext)
+library(tidyverse)
 library(wordcloud)
 ```
 
+\clearpage
+
+# Project Overview
 <!-- Presenter: ?? -->
 
-### Team Members
+## Team Members
 
 - Donald Butler
 - Nick Oliver
 - Jeffrey Parks
 - Mark Schamfield
 
----
-
-### Project Objective
+## Project Objective
 
 Use data to answer the question, “Which are the most valued data science skills?”
 
@@ -43,9 +51,7 @@ Use data to answer the question, “Which are the most valued data science skill
 - Perform tidying, transformaiton and exploratory data analytis in R.
 - Analyze data and show findings.
 
----
-
-### Project Approach
+## Project Approach
 
 We considered potential data sources for this project, including:
 
@@ -68,23 +74,22 @@ Once we had the data in hand, we identified a multi-step approach to analysis:
 - Built a relational database with individual tables for Job Listings, Companies and Skills
 - Query the database to analyze the counts, frequency and trends.
 
----
 
-### Data Acquisition
+\clearpage
+# Data Acquisition
 
 <!-- Presenter: Jeff -->
 
-wfoerfgoewrhiugwergoh
+## Selenium
 
----
-
-### Data Transformation 
+\clearpage
+# Data Transformation 
 
 Our first step was to transform the raw job descriptions into tokenized fields for analysis.  We decided to create one table with all words (except for "stop words") to analyze overall frequency at a high level, and a second table that would identify common multi-word combinations called "ngrams."
 
 This second approach would correctly return the frequency of phrases such as "Machine Learning", instead of separate results for "Machine" and "Learning". We further filtered this second table manually to identify actual job skills, and not extraneous information (such as company names and other filler text.)
 
-1. Load the job descriptions dataset
+**Load the job descriptions dataset**
 
 ```{r}
 urlfile<-"https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/data/job_listings_final.csv" 
@@ -92,7 +97,9 @@ jobdat <- read_csv(url(urlfile))
 jobdat<-data_frame(jobdat)
 ```
 
-2. Create **jobdata_words.csv** file from dataset for analyis of overall term frequency. Used **tidytext** to un-nest the job descriptions into indivdual words, removing "stop words" (the, of, to, etc)
+**Create jobdata_words.csv** 
+
+We created this table to analyze overall term frequency, using **tidytext** to un-nest the job descriptions into indivdual words, and removing "stop words" (the, of, to, etc)
 
 ```{r, eval=FALSE}
 jobdat_word<- unnest_tokens(
@@ -113,7 +120,9 @@ write_csv(jobdat_word,'data/jobdata_words.csv')
 ```
 
 
-3. Create **jobdat_ngrams.csv** file from raw dataset for analysis of tokenized terms/phrases that meet criteria for "skills." Using **tidytext**, created ngrams of 1, 2, and 3 words, filtered out the common stop_words, and then did a count of each and filtered down to the rows that occurred at least 10 times within the raw dataset. The resulting 6015 rows were exported to a f.csv ile which I loaded into Excel to manually determine which terms described actual job skills and which did not. 
+**Create jobdat_ngrams.csv**
+
+We created this file to analyze terms and phrases that meet criteria for "hard skills."  Using **tidytext**, created ngrams of 1, 2, and 3 words, filtered out the common stop_words, and then did a count and filtered the rows that occurred at least 10 times within the raw dataset. The resulting 6015 rows were exported to a .csv file used to manually determine which terms described actual job skills and which did not. 
 
 ```{r, eval=FALSE}
 jobdat_1gram <- jobdat %>%
@@ -154,15 +163,16 @@ jobdat_ngrams %>%
               sep = '\t', row.names = FALSE)
 ```
 
-## Loading into Database
+
+\clearpage
+# Database Operations
 
 <!-- Presenter: Nick -->
 
 To support the data analysis, we transformed the raw dataset into a relational database using **Sqlite**, a file-based format that is both fast and portable, so that all team members could access the database without having to manage any kind of server. 
 
-1. Create Database
-
-```{r, eval=FALSE}
+## Create Database and Tables
+```{r}
 # For testing - use in-memory DB
 con <- dbConnect(RSQLite::SQLite(), dbname = ":memory:") 
 
@@ -170,8 +180,7 @@ con <- dbConnect(RSQLite::SQLite(), dbname = ":memory:")
 #con <- dbConnect(RSQLite::SQLite(), dbname = "project3_job_skills.db") 
 ```
 
-2. Create Tables
-```{r, eval=FALSE}
+```{r}
 baseUrl <- "https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/sql/"
 tables <- c("company", "job_listing", "job_listing_skill","job_listing_word")
 for (table in tables) {
@@ -182,14 +191,16 @@ for (table in tables) {
 }
 ```
 
-3. Load Data From CSV
-```{r, eval=FALSE}
+**Load Data From CSV**
+```{r}
 urlfile<-"https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/data/job_listings_final.csv" 
 jobdat <- read_csv(url(urlfile))
 ```
 
-4. Populate **company** table: unique row per company (420)
-```{r, eval=FALSE}
+**Populate company table**
+
+Unique row per company (420)
+```{r}
 companiesDf <- jobdat %>% 
   select(company_name, company_size, industry) %>% 
   distinct() 
@@ -205,8 +216,11 @@ dbWriteTable(con,"company",companiesDf, append=TRUE)
 |`company_size`|`int`|`null`|
 |`industry`|`int`|`null`|
 
-5. Populate **job_listing** table: unique row per job listing (849)
-```{r, eval=FALSE}
+\clearpage
+**Populate job_listing table**
+
+Unique row per job listing (849)
+```{r}
 # Remove columns that are in the company table
 jobListingDf <- jobdat %>% select(-c("company_size", "industry"))
 
@@ -241,9 +255,13 @@ dbWriteTable(con, "job_listing", joined, append=TRUE)
 |`date_posted`|`text`||
 |`company_id`|`int`|`fk`|
 
-6. Populate **job_listing_word** table: unique row per word (18,000)
+---
 
-```{r, eval=FALSE}
+**Populate job_listing_word table**
+
+Unique row per word (18,000)
+
+```{r}
 wordsDataUrl <- "https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/data/jobdata_words.csv"
 wordsJobListingData <- read_csv(url(wordsDataUrl))
 wordsJobListingData<-data_frame(wordsJobListingData)
@@ -261,10 +279,15 @@ dbWriteTable(con,"job_listing_word", joinedWords, append=TRUE)
 |`id`|`int`|`pk`|
 |`skill`|`text`|`not null`|
 
+---
 
-7. Populate **job_listing_skill** table: unique row per tokenized skill (53)
+**Populate job_listing_skill table**
 
-```{r, eval=FALSE}
+Unique row per tokenized skill (53). 
+
+We loop though the list of skills and use regex to determine if the skill is listed within the description text. A new attribute is created in the jobs data frame that indicates if the skill is required.
+
+```{r}
 skillsDataUrl <- "https://raw.githubusercontent.com/nolivercuny/data607-team-6-project-3/master/JobSkills.csv"
 skillsData <- read_csv(url(skillsDataUrl))
 skillsDf <-data_frame(skillsData)
@@ -295,19 +318,131 @@ dbDisconnect(con)
 |`job_listing_id`|`int`|`fk`|
 |`skill`|`text`|`not null`|
 
----
-
-### Exploratory Data Analysis
+\clearpage
+# Exploratory Data Analysis
 
 <!-- Presenter: ? -->
 
+## Load from database / create fact tables
+```{r eval=TRUE}
+# replace with relative or remote path to db
+dbLocation <-"/Users/jeff/Development/data607-team-6-project-3/data/project3_job_skills.db"
+con <- dbConnect(RSQLite::SQLite(), dbname = dbLocation)
+
+# get tables
+tables <- dbListTables(con)
+company_df <- dbReadTable(con, 'company')
+listing_df <- dbReadTable(con, 'job_listing')
+skills_df <- dbReadTable(con, 'job_listing_skill')
+words_df <- dbReadTable(con, 'job_listing_word')
+
+# construct fact tables
+job_listings <- listing_df %>%
+  inner_join(company_df, by = c('company_id' = 'id'))
+
+job_listings_skills <- job_listings %>%
+  inner_join(skills_df, by = c('id' = 'job_listing_id'))
+```
+
+## Frequency - All Terms
+
 For our initial EDA, we wanted to look at the raw frequency of terms among all 849 job listings, and identify some of the most commonly-used words. 
 
+```{r eval=TRUE}
+words_df %>%
+  count(skill) %>%
+  with(wordcloud(skill,n,scale=c(4,0.5),max.words=50,
+                 random.color = FALSE,rot.per=0.25,colors = colours()))
+```
 
+\clearpage
+## Skills
 
----
+### Soft Skills
 
-### Conclusions
+This wordcloud graph of all terms effectively highlights both technical and "soft skill"terms with high frequencies. If we apply a manual filter for some of the common "soft skills" in our dataset, we get a clearer picture of what employers are looking for in this category from Data Scientists:
+
+```{r, eval=TRUE}
+soft_skills<-c("business","team","build","people","research","insights","gender","support","communication","equal","customers","complex","management","services","impact","projects","global","create","learn","strategy","driven","improve","committed","future","decision","leadership","responsible")
+
+words_df %>%
+  filter(skill %in% soft_skills) %>%
+  count(skill) %>%
+  with(wordcloud(skill,n,scale=c(4,0.5),max.words=50,
+                 random.color = FALSE,rot.per=0.25,colors = colours()))
+
+soft_skills_df <- words_df %>%
+  filter(skill %in% soft_skills) %>%
+  count(skill) %>%
+  arrange(desc(n))
+```
+
+\clearpage
+###  Hard Skills
+
+#### Technical Skills for Data Scientist or Data Analyst in New York, NY
+
+```{r, eval=TRUE}
+job_listings_skills %>%
+  filter(grepl('data scientist|data analyst',job_title,ignore.case = TRUE)) %>%
+  group_by(skill) %>%
+  summarize(count = n()) %>%
+  filter(count >= 30) %>%
+  ggplot(aes(x = reorder(skill,count), y = count)) + geom_bar(stat = 'identity') + coord_flip()
+```
+
+\clearpage
+## Companies
+
+### Companies posting Data Science jobs in New York, NY
+
+```{r, eval=TRUE}
+job_listings %>%
+  group_by(company_name) %>%
+  summarize(count = n()) %>%
+  filter(count >= 5) %>%
+  ggplot(aes(x = reorder(company_name,count), y = count)) + geom_bar(stat = 'identity') + coord_flip()
+```
+
+### Companies requiring the most skills
+
+- Select job listings grouped by company and count the number of skills required. 
+- Then select number of job listings by company. 
+- Join the two dataframes and add a column which is the mean number of skills required by taking the total number of required skills divided by the total number of listings.
+- Then arrange by highest number of skills required, select to 10, and put in a table.
+
+```{r, eval=TRUE}
+companySkillsCountDf <- dbGetQuery(con, 
+  "select c.company_name, 
+  count(jls.skill) as required_skills
+  from job_listing jl
+  join job_listing_skill jls on jl.id = jls.job_listing_id
+  join company c on c.id = jl.company_id
+  group by company_name
+  order by required_skills desc;")
+
+companyJobListingsCountDf <- dbGetQuery(con, 
+  "select c.company_name, 
+  count(jl.id) as number_job_listings
+  from job_listing jl
+  join company c on c.id = jl.company_id
+  group by company_name
+  order by number_job_listings desc;")
+
+joinedDf <- left_join(companyJobListingsCountDf, 
+                      companySkillsCountDf, 
+                      by="company_name") %>%
+  mutate(mean_skills_per_listing = round(required_skills / number_job_listings))
+
+joinedDf %>% 
+  select(company_name, mean_skills_per_listing) %>% 
+  arrange(desc(mean_skills_per_listing)) %>%
+  top_n(10, mean_skills_per_listing) %>%
+  kable(format='simple')
+```
+
+\clearpage
+# Conclusions
 
 <!-- Presenter: ?? -->
 
