@@ -79,7 +79,9 @@ Once we had the data in hand, we identified a multi-step approach to analysis:
 # Data Acquisition
 <!-- Presenter: Jeff -->
 
-Our dataset was based on a search on LinkedIn.com for job listings matching the term "Data Scientist" in the New York, NY Metropolitan region on the evening of October 12, 2021.
+Our dataset was based on a search on LinkedIn.com for job listings matching the term "Data Scientist" in the New York, NY Metropolitan region on the evening of October 12, 2021:
+
+https://www.linkedin.com/jobs/search/?geoId=90000070&keywords=data%20scientist&location=New%20York%20City%20Metropolitan%20Area
 
 Results were scraped from an automated browser session managed by the **Selenium** library using **Chromedriver**.  The Selenium API received instructions from a Python Jupyter Notebook, and was executed in two sessions.
 
@@ -87,11 +89,9 @@ The first session navigated to the LinkedIn search results, collected the job li
 
 The second session loaded the .csv file with the dedicated URLs for each search result, and looping through these results collected information from each page.  This session resulted in 838 complete profiles and took several hours to complete, exempting search results that were deemed invalid (such as "no longer accepting applications" or other flags.)  
 
+Results were saved as a .csv file, **job_listings_final.csv**.
 
-
-
-
-## Selenium
+The Jupyter Notebook, Selenium API script and supporting data can be found in: https://github.com/nolivercuny/data607-team-6-project-3/tree/master/data/jobs-scraper
 
 \clearpage
 # Data Transformation 
@@ -383,10 +383,13 @@ words_df %>%
                  random.color = FALSE,rot.per=0.25,colors = colours()))
 ```
 
-\clearpage
+
 ###  Hard Skills
 
 #### Technical Skills for Data Scientist or Data Analyst in New York, NY
+
+
+Our analysis of technical skill frequency suggests that candidates are expected to be versed in Python, R and SQL as foundational skills.
 
 ```{r, eval=TRUE}
 job_listings_skills %>%
@@ -397,10 +400,12 @@ job_listings_skills %>%
   ggplot(aes(x = reorder(skill,count), y = count)) + geom_bar(stat = 'identity') + coord_flip()
 ```
 
-\clearpage
+
 ## Companies
 
 ### Companies posting Data Science jobs in New York, NY
+
+As expected, FAANG companies dominated the listings but there was also strong activity in the Finance, Media and Healthcare sectors.
 
 ```{r, eval=TRUE}
 job_listings %>%
@@ -412,10 +417,7 @@ job_listings %>%
 
 ### Companies requiring the most skills
 
-- Select job listings grouped by company and count the number of skills required. 
-- Then select number of job listings by company. 
-- Join the two dataframes and add a column which is the mean number of skills required by taking the total number of required skills divided by the total number of listings.
-- Then arrange by highest number of skills required, select to 10, and put in a table.
+Certain companies were very detailed in their postings, with high average frequency of technical skills outlined in their job description.
 
 ```{r, eval=TRUE}
 companySkillsCountDf <- dbGetQuery(con, 
@@ -452,8 +454,13 @@ joinedDf %>%
 
 <!-- Presenter: ?? -->
 
-- Split between soft skills vs hard skills?
-- Different types of skills per company / industry
-- Companies like Amazon -- using a general template? 
-- Importance of 'trulingual' Pyhton and R, SQL
-- Plus general Stats, Math
+
+- Top "Hard Skills" included Python, SQL and R as top platforms/languages, with strong emphasis on Statistics, Modeling, Machine Learning and Mathematics.  
+
+- Top "Soft Skills" included Teams, Management, Communication, Strategy and Customers.
+
+During our analysis, we also identified additional questions for further investigation, such as:
+
+- How do Hard and Soft Skills vary by Industry and by Company?
+- Are certain high-volume companies using basic job description templates?  If so, what are the real differntiators from listing to listing?
+- What specific mathematical and statistical skillsets are most desired/required?
