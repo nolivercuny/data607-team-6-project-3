@@ -42,6 +42,10 @@ library(wordcloud)
 - Jeffrey Parks
 - Mark Schamfield
 
+## GitHub
+
+https://github.com/nolivercuny/data607-team-6-project-3
+
 ## Project Objective
 
 Use data to answer the question, “Which are the most valued data science skills?”
