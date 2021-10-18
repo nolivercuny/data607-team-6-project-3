@@ -77,8 +77,19 @@ Once we had the data in hand, we identified a multi-step approach to analysis:
 
 \clearpage
 # Data Acquisition
-
 <!-- Presenter: Jeff -->
+
+Our dataset was based on a search on LinkedIn.com for job listings matching the term "Data Scientist" in the New York, NY Metropolitan region on the evening of October 12, 2021.
+
+Results were scraped from an automated browser session managed by the **Selenium** library using **Chromedriver**.  The Selenium API received instructions from a Python Jupyter Notebook, and was executed in two sessions.
+
+The first session navigated to the LinkedIn search results, collected the job listing titles and dedicated URLs from the results page, and then automatically paginated to the next page of results and repeated the collection until all search results (approximately 1000) were captured.  These results were written to a .csv file, which became the input for the second session.   This session took approximately 8-10 minutes to complete.
+
+The second session loaded the .csv file with the dedicated URLs for each search result, and looping through these results collected information from each page.  This session resulted in 838 complete profiles and took several hours to complete, exempting search results that were deemed invalid (such as "no longer accepting applications" or other flags.)  
+
+
+
+
 
 ## Selenium
 
@@ -370,11 +381,6 @@ words_df %>%
   count(skill) %>%
   with(wordcloud(skill,n,scale=c(4,0.5),max.words=50,
                  random.color = FALSE,rot.per=0.25,colors = colours()))
-
-soft_skills_df <- words_df %>%
-  filter(skill %in% soft_skills) %>%
-  count(skill) %>%
-  arrange(desc(n))
 ```
 
 \clearpage
