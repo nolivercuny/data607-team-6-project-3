@@ -1,5 +1,5 @@
 ---
-title: "CUNY 607 - Project 3"
+title: "CUNY DATA 607 - Project 3"
 author: "Team 6 Presentation"
 date: "October 17, 2021"
 
@@ -56,16 +56,16 @@ Use data to answer the question, “Which are the most valued data science skill
 We considered several potential data sources for this project, including:
 
 - Scraping "Data Scientist" job postings from websites like Indeed and LinkedIn.
-- Examine Reddit data science-related subreddits for questions related to "skills" or "careers"
+- Examining Reddit data science-related subreddits for questions related to "skills" or "careers"
 - Looking at Python, NPM or R packages that mention specific skills
 - Reviewing Youtube videos that mention learning some data science skill
-- Interviewing question/interview study guides that are targeted at data scientists
+- Scanning question/interview study guides that are targeted at data scientists
 - Finding LinkedIn public profiles of employed data scientists and what skills they list
 - Analyzing StackOverflow data science-related pages
 
 After initial discussion, we decided to attempt the first option, scraping 'Data Scientist' job listings. 
 
-Our initial idea was to leverage an API endpoint from one of the popular services, such as Indeed.com.  However, we found that while Indeed does produce an API, it restricts access to verified Publishers of job postings. In the interests of time, and since we had some team members with experience in web scraping, we pulled job listings directly from the from LinkedIn website using a popular browser automation tool, **Selenium** using Python.
+Our initial idea was to leverage an API endpoint from one of the popular services, such as Indeed.com.  However, we found that while Indeed does produce an API, it restricts access to verified Publishers of job postings. In the interests of time, and since we had some team members with experience in web scraping, we pulled job listings directly from the from LinkedIn website using a popular browser automation tool, **Selenium** in Python.
 
 Once we had the data in hand, we identified a multi-step approach to analysis:
 
@@ -85,9 +85,9 @@ https://www.linkedin.com/jobs/search/?geoId=90000070&keywords=data%20scientist&l
 
 Results were scraped from an automated browser session managed by the **Selenium** library using **Chromedriver**.  The Selenium API received instructions from a Python Jupyter Notebook, and was executed in two sessions.
 
-The first session navigated to the LinkedIn search results, collected the job listing titles and dedicated URLs from the results page, and then automatically paginated to the next page of results and repeated the collection until all search results (approximately 1000) were captured.  These results were written to a .csv file, which became the input for the second session.   This session took approximately 8-10 minutes to complete.
+The first session navigated to the LinkedIn search results, collected the job listing titles and dedicated URLs from the results page, and then automatically navigated to the next page of results and repeated the collection until all search results (approximately 1000) were captured.  These results were written to a .csv file, which became the input for the second session.   This session took approximately 8-10 minutes to complete.
 
-The second session loaded the .csv file with the dedicated URLs for each search result, and looping through these results collected information from each page.  This session resulted in almost 850 complete profiles and took several hours to complete, exempting search results that were deemed invalid (such as "no longer accepting applications" or other flags.)  
+The second session loaded the .csv file with the dedicated URLs for each search result, looped through the results and collected information from each page.  This session resulted in almost 850 complete profiles and took several hours to complete, exempting search results that were deemed invalid (such as "no longer accepting applications" or other flags.)  
 
 Results were saved as **job_listings_final.csv**.
 
@@ -377,7 +377,7 @@ words_df %>%
 
 ### Soft Skills
 
-The previous wordcloud effectively highlights both technical and "soft skill"terms with high frequencies. If we apply a manual filter for some of the common "soft skills" in our dataset, we get a clearer picture of what employers are looking for in this category from Data Scientists:
+The previous wordcloud effectively highlights both technical and "soft skill" terms with high frequencies. If we apply a manual filter for some of the common "soft skills" in our dataset, we get a clearer picture of what employers are looking for in this category from Data Scientists:
 
 ```{r, eval=TRUE}
 soft_skills<-c("business","team","build","people","research","insights","gender","support","communication","equal","customers","complex","management","services","impact","projects","global","create","learn","strategy","driven","improve","committed","future","decision","leadership","responsible")
@@ -394,7 +394,7 @@ words_df %>%
 
 #### Technical Skills for Data Scientist or Data Analyst in New York, NY
 
-Looking strictly at "hard skills", uur analysis frequency suggests that candidates should be "tri-lingual" in Python, R and SQL as foundation skills.
+Looking strictly at "hard skills" frequency, our analysis suggests that candidates should be "tri-lingual" in Python, R and SQL as foundational skills.
 
 ```{r, eval=TRUE}
 job_listings_skills %>%
@@ -462,10 +462,10 @@ joinedDf %>%
 
 - Top "Hard Skills" included Python, SQL and R as top platforms/languages, with strong emphasis on Statistics, Modeling, Machine Learning and Mathematics.  
 
-- Top "Soft Skills" included Teams, Management, Communication, Strategy and Customers.
+- Top "Soft Skills" included Teams, Management, Communication and Strategy.
 
 During our analysis, we also identified additional questions for further investigation, such as:
 
 - How do Hard and Soft Skills vary by Industry and by Company?
-- Are certain high-volume companies using basic job description templates?  If so, what are the real differntiators from listing to listing?
+- Are certain high-volume companies using basic job description templates?  If so, what are the real differentiators from listing to listing?
 - What specific mathematical and statistical skillsets are most desired/required?
