@@ -5,11 +5,12 @@ date: "October 17, 2021"
 
 output:
 #  ioslides_presentation
-  prettydoc::html_pretty:
-    theme: hpstr
-    highlight: github
-editor_options: 
-  chunk_output_type: console
+   pdf_document
+#  prettydoc::html_pretty:
+#    theme: hpstr
+#    highlight: github
+#  editor_options: 
+#    chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -116,13 +117,15 @@ write_csv(jobdat_word,'data/jobdata_words.csv')
 
 ```{r, eval=FALSE}
 jobdat_1gram <- jobdat %>%
-  unnest_tokens(ngram,description,token='ngrams',n=1,format='text',drop=TRUE,to_lower=TRUE) %>%
+  unnest_tokens(ngram,description,token='ngrams',n=1,format='text',
+                drop=TRUE,to_lower=TRUE) %>%
   filter(!ngram %in% stop_words$word) %>%
   count(ngram,sort = TRUE) %>%
   filter(n >= 10)
 
 jobdat_2gram <- jobdat %>%
-  unnest_tokens(ngram,description,token='ngrams',n=2,format='text',drop=TRUE,to_lower=TRUE) %>%
+  unnest_tokens(ngram,description,token='ngrams',n=2,format='text',
+                drop=TRUE,to_lower=TRUE) %>%
   separate(ngram,c('word1','word2'),sep = " ") %>%
   filter(!word1 %in% stop_words$word) %>%
   filter(!word2 %in% stop_words$word) %>%
@@ -131,7 +134,8 @@ jobdat_2gram <- jobdat %>%
   filter(n >= 10)
 
 jobdat_3gram <- jobdat %>%
-  unnest_tokens(ngram,description,token='ngrams',n=3,format='text',drop=TRUE,to_lower=TRUE) %>%
+  unnest_tokens(ngram,description,token='ngrams',n=3,format='text',
+                drop=TRUE,to_lower=TRUE) %>%
   separate(ngram,c('word1','word2','word3'),sep = " ") %>%
   filter(!word1 %in% stop_words$word) %>%
   filter(!word2 %in% stop_words$word) %>%
@@ -146,7 +150,8 @@ jobdat_ngrams <- jobdat_1gram %>%
   arrange(desc(n))
 
 jobdat_ngrams %>%
-  write.table(file = './jobdat_ngrams.csv',quote = FALSE, sep = '\t', row.names = FALSE)
+  write.table(file = './jobdat_ngrams.csv',quote = FALSE, 
+              sep = '\t', row.names = FALSE)
 ```
 
 ## Loading into Database
@@ -185,7 +190,10 @@ jobdat <- read_csv(url(urlfile))
 
 4. Populate **company** table: unique row per company (420)
 ```{r, eval=FALSE}
-companiesDf <- jobdat %>% select(company_name, company_size, industry) %>% distinct() 
+companiesDf <- jobdat %>% 
+  select(company_name, company_size, industry) %>% 
+  distinct() 
+
 companiesDf$company_name <- companiesDf$company_name %>% replace_na("unknown")
 dbWriteTable(con,"company",companiesDf, append=TRUE)
 ```
@@ -267,9 +275,12 @@ for (i in 1:nrow(jobListingWithId)) {
   listing <- jobListingWithId[i,]
   for (j in 1:nrow(skillsDf)) {
     skill <- skillsDf[j,]
-    detected <- str_detect(listing$description, regex(paste('[^A-Z0-9]',skill,'[^A-Z0-9]',sep = ''),ignore_case = TRUE))
+    detected <- str_detect(listing$description, 
+                           regex(paste('[^A-Z0-9]',skill,'[^A-Z0-9]',sep = ''),
+                                 ignore_case = TRUE))
     if(detected==TRUE){
-      skillsTableDf <- skillsTableDf %>% add_row(job_listing_id = listing$id, skill = skill$JobSkill)
+      skillsTableDf <- skillsTableDf %>% 
+        add_row(job_listing_id = listing$id, skill = skill$JobSkill)
     }
   }
 }
